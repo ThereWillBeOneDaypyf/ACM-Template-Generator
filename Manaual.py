@@ -1,13 +1,4 @@
 # coding=utf-8
-import re
-import requests
-import Image
-import threading
-from math import *
-from pytesser import *
-from cStringIO import StringIO
-import time
-from hashlib import md5
 import os
 import sys
 
@@ -97,7 +88,8 @@ if __name__ == '__main__':
     f.write('%s' % Head)
     f.write('\\title{%s}\n' % Title)
     f.write('\\author{%s}\n' % Author)
-    f.write('\\begin{document}\n\\begin{titlepage}\n\\maketitle\n\\end{titlepage}\n\\clearpage\n\\tableofcontents\n')
+    f.write(
+        '\\begin{document}\n\\begin{titlepage}\n\\maketitle\n\\end{titlepage}\n\\clearpage\n\\tableofcontents\n')
 
     read(0, '', './')
 
