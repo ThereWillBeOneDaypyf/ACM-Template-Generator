@@ -3,18 +3,18 @@
 // dis[x]为起点到点x的最短路 inf表示无法走到
 // 记得初始化
 const int MAXN = 100;	// 点数最大值
-const int INF = 0x3F3F3F3F;
+const int INF = 0x3f3f3f3f;
 int G[MAXN][MAXN], dis[MAXN];
 bool vis[MAXN];
 void init(int n) {
-	memset(G, 0x3F, sizeof(G));
+	set(G, 0x3f);
 }
 void add_edge(int u, int v, int w) {
 	G[u][v] = min(G[u][v], w);
 }
 void Dijkstra(int s, int n) {
-	memset(vis, 0, sizeof(vis));
-	memset(dis, 0x3F, sizeof(dis));
+	set(vis, 0);
+	set(dis, 0x3f);
 	dis[s] = 0;
 	for (int i = 0; i < n; i++) {
 		int x, min_dis = INF;

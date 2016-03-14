@@ -1,6 +1,6 @@
 vector<pair<int, PII> > G;
 void add_edge(int u, int v, int d) {
-    G.push_back(make_pair(d, make_pair(u, v)));
+    G.pb(mp(d, mp(u, v)));
 }
 int Kruskal(int n) {
     init(n);
@@ -16,7 +16,6 @@ int Kruskal(int n) {
             unite(x, y);
             num++;
             ret += d;
-            printf("(%d, %d) %d\n", x, y, d);
         }
         if (num == n - 1) break;
     }
