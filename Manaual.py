@@ -23,7 +23,7 @@ Head = \
     columns     = fullflexible,
     commentstyle = \color[RGB]{0,128,0},
     keywordstyle = \color[RGB]{0,0,255},
-    basicstyle   = \footnotesize\ttfamily,
+    basicstyle   = \large\ttfamily,
     stringstyle  = \color[RGB]{148,0,209}\ttfamily,
     rulesepcolor = \color{red!20!green!20!blue!20},
     showstringspaces = false,
@@ -68,7 +68,7 @@ def read(level, folder, pwd):
                             index += 1
                             break
                         if index != 1:
-                            f.write(' \\\\\n')
+                            f.write('\n')
                         f.write('%s' % text[index][3:-1])
                         index += 1
                 if index < len(text):
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     f.write('\\title{%s}\n' % Title)
     f.write('\\author{%s}\n' % Author)
     f.write(
-        '\\begin{document}\n\\begin{titlepage}\n\\maketitle\n\\end{titlepage}\n\\clearpage\n\\tableofcontents\n')
+        '\\begin{document}\\large\n\\begin{titlepage}\n\\maketitle\n\\end{titlepage}\n\\clearpage\n\\tableofcontents\n')
 
     read(0, '', './')
 
