@@ -1,4 +1,6 @@
-// 0 <= m <= n <= 1000
+// ---
+// $0 \leq m \leq n \leq 1000$
+// ---
 const int maxn = 1010;
 ll C[maxn][maxn];
 void CalComb() {
@@ -10,7 +12,9 @@ void CalComb() {
 	}
 }
 
-// 0 <= m <= n <= 105, 模p为素数
+// ---
+// $0 \leq m \leq n \leq 10^5$, 模p为素数
+// ---
 const int maxn = 100010;
 ll f[maxn];
 void CalFact() {

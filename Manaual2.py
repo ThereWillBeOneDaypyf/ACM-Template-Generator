@@ -4,7 +4,7 @@ import sys
 import json
 
 TexHead = r"""
-\documentclass[a4paper]{article}
+\documentclass[a4]{article}
 \usepackage{xeCJK}
 \usepackage{amsmath, amsthm}
 \usepackage{listings,xcolor}
@@ -36,7 +36,7 @@ def InitSetting():
         print u'读取到保存的设置: '
         for key in SettingData:
             print '[%s] %s' % (key, SettingData[key])
-        op = raw_input(u'是否使用已保存的设置？[Y/n]')
+        op = raw_input('是否使用已保存的设置？[Y/n]')
         if not op in ['n', 'N', 'no', 'No', 'NO']:
             global TITLE, AUTHOR, FILE
             for key in ['TITLE', 'AUTHOR', 'FILE']:
@@ -50,36 +50,79 @@ def InitSetting():
 
 def NewSetting():
     global TITLE, AUTHOR, FILE
-    TITLE = raw_input(u'请输入标题: ')
-    AUTHOR = raw_input(u'请输入作者: ')
-    FILE = raw_input(u'请输入文件名: ')
+    TITLE = raw_input('请输入标题: ')
+    AUTHOR = raw_input('请输入作者: ')
+    FILE = raw_input('请输入文件名: ')
     Data = dict()
     for key in ['TITLE', 'AUTHOR', 'FILE']:
         Data[key] = globals()[key]
     json.dump(Data, open('setting.dat', 'w'))
 
 
-def Generate():
-    os.system('xelatex %s.tex' % FILE)
+def Clear():
     for suffix in ['aux', 'log', 'toc']:
-        os.remove('%s.%s' % (FILE, suffix))
-        os.system('open %s.pdf' % FILE)
+        filename = '%s.%s' % (FILE, suffix)
+        if os.path.exists(filename):
+            os.remove(filename)
 
 
-def dfs(pwd):
-    ls = os.popen('ls | grep [0-9]_').read().split('\n')[:-1]
+def Generate():
+    Clear()
+    os.system('xelatex %s.tex' % FILE)
+    os.system('xelatex %s.tex' % FILE)
+    Clear()
+    os.system('open %s.pdf' % FILE)
+
+
+def ReadCpp(file):
+    f = open(file, 'r')
+    Tex = 0
+    TargetFile.write('\\begin{lstlisting}\n')
+    for line in f:
+        if line[:-1] == '// ---':
+            Tex = not Tex
+            ToWrite = '\\%s{lstlisting}\n' % ('begin', 'end')[Tex]
+            TargetFile.write(ToWrite)
+            continue
+        TargetFile.write(line[(0, 3)[Tex]:])
+    TargetFile.write('\\end{lstlisting}\n')
+    f.close()
+
+
+def ReadTex(file):
+    f = open(file, 'r')
+    for line in f:
+        TargetFile.write(line)
+    f.close()
+
+
+def Search(level, pwd, folder=''):
+    ls = os.popen('ls %s| grep [0-9]_' % pwd).read().split('\n')[:-1]
+    if folder:
+        TargetFile.write(SECTION[level] % folder[3:])
     for item in ls:
+        item.replace(' ', '\\ ')
         if '.cpp' in item:
-            pass
-        elif '.md' in item:
-            pass
+            if not item[:2] == '00':
+                TargetFile.write(SECTION[level + 1] % item[3:-4])
+            ReadCpp(pwd + item)
+        elif '.tex' in item:
+            if not item[:2] == '00':
+                TargetFile.write(SECTION[level + 1] % item[3:-4])
+            ReadTex(pwd + item)
         else:
-            pass
+            cd = os.popen('cd %s%s/' % (pwd, item)).read()
+            if 'Not a directory' in cd or 'No such file or directory' in cd:
+                print '[Unknown File] %s/%s' % (pwd, item)
+            else:
+                Search(level + 1, pwd + item + '/', item)
 
 
 if __name__ == '__main__':
     # 全局设置
     TITLE, AUTHOR, FILE = '', '', ''
+    SECTION = ['', '\\section{%s}\n',
+               '\\subsection{%s}\n', '\\subsubsection{%s}\n']
 
     InitSetting()
 
@@ -93,11 +136,11 @@ if __name__ == '__main__':
     TargetFile.write('\\maketitle\\clearpage\n\\tableofcontents\\clearpage\n')
 
     # Search Files
-    dfs('./')
+    Search(0, './')
 
     # End Output
     TargetFile.write('\\end{document}\n')
     TargetFile.close()
 
     # Gen
-    # Generate()
+    Generate()
