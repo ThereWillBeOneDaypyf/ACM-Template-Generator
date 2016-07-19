@@ -47,3 +47,63 @@ $(n+1)lcm(C_n^0,C_n^1,...,C_n^{n-1},C_n^{n})=lcm(1,2,...,n+1)$
 
 $h(0)=h(1)=1,h(n)=\frac{(4n-2)h(n-1)}{n+1}=\frac{C_{2n}^n}{n+1}=C_{2n}^n-C_{2n}^{n-1}$
 
+$$
+a_{n+m}=\sum_{i=0}^{m-1}b_ia_{n+i}\Rightarrow
+\left(
+\begin{matrix}
+ a_{n+m}    \\\\
+ a_{n+m-1}  \\\\
+ \vdots     \\\\
+ a_{n+1}    \\\\
+\end{matrix}
+\right)
+=
+\left(
+\begin{matrix}
+ b_{m-1} && \cdots && b_1    && b_0    \\\\
+ 1       && \cdots && 0      && 0      \\\\
+ \vdots  && \ddots && \vdots && \vdots \\\\
+ 0       && \cdots && 1      && 0      \\\\
+\end{matrix}
+\right)
+\left(
+\begin{matrix}
+ a_{n+m-1} \\\\
+ a_{n+m-2} \\\\
+ \vdots    \\\\
+ a_n       \\\\
+\end{matrix}
+\right)
+$$
+
+$$
+a_{n+m}=\sum_{i=0}^{m-1}b_ia_{n+i}+c\Rightarrow
+\left(
+\begin{matrix}
+ a_{n+m}    \\\\
+ a_{n+m-1}  \\\\
+ \vdots     \\\\
+ a_{n+1}    \\\\
+ 1          \\\\
+\end{matrix}
+\right)
+=
+\left(
+\begin{matrix}
+ b_{m-1} && \cdots && b_1    && b_0    && c      \\\\
+ 1       && \cdots && 0      && 0      && 0      \\\\
+ \vdots  && \ddots && \vdots && \vdots && \vdots \\\\
+ 0       && \cdots && 1      && 0      && 0      \\\\
+ 0       && \cdots && 0      && 0      && 1      \\\\
+\end{matrix}
+\right)
+\left(
+\begin{matrix}
+ a_{n+m-1} \\\\
+ a_{n+m-2} \\\\
+ \vdots    \\\\
+ a_n       \\\\
+ 1         \\\\
+\end{matrix}
+\right)
+$$

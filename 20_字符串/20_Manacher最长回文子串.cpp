@@ -1,17 +1,31 @@
-const int MAXN = 110010;
-char Ma[MAXN * 2];
-int Mp[MAXN * 2];
-void Manacher(char s[], int len) {
-    int l = 0; Ma[l++] = '$'; Ma[l++] = '#';
-    for (int i = 0; i < len; i++) {
-        Ma[l++] = s[i]; Ma[l++] = '#';
+// O(n)求解最长回文子串
+const int N = 1000100;
+char s[N], str[N << 1];
+int p[N << 1];
+void Manacher(char s[], int &n) {
+    str[0] = '$';
+    str[1] = '#';
+    for (int i = 0; i < n; i++) {
+        str[(i << 1) + 2] = s[i];
+        str[(i << 1) + 3] = '#';
     }
-    Ma[l] = 0; int mx = 0, id = 0;
-    for (int i = 0; i < l; i++) {
-        Mp[i] = mx > i ? min(Mp[2 * i d - i], mx - i) : 1;
-        while (Ma[i + Mp[i]] == Ma[i - Mp[i]]) Mp[i]++;
-        if (i + Mp[i] > mx) {
-            mx = i + Mp[i]; id = i;
+    n = 2 * n + 2;
+    str[n] = 0;
+    int mx = 0, id;
+    for (int i = 1; i < n; i++) {
+        p[i] = mx > i ? min(p[2 * id - i], mx - i) : 1;
+        for (; str[i - p[i]] == str[i + p[i]]; p[i]++);
+        if (p[i] + i > mx) {
+            mx = p[i] + i;
+            id = i;
         }
     }
+}
+int solve(char s[]) {
+    int n = strlen(s);
+    Manacher(s, n);
+    int res = 0;
+    for (int i = 0; i < n; i++)
+        res = max(res, p[i]);
+    return res - 1;
 }

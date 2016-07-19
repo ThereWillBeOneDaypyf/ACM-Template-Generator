@@ -17,12 +17,12 @@ void Dijkstra(int s, int n) {
 	memset(vis, 0, sizeof(vis));
 	memset(dis, 0x3F, sizeof(dis));
 	dis[s] = 0;
-	priority_queue<PII, VII, greater<PII> > PQ;
-	PQ.push(make_pair(dis[s], s));
-	while (!PQ.empty()) {
-		PII t = PQ.top();
+	priority_queue<PII, VII, greater<PII> > q;
+	q.push(make_pair(dis[s], s));
+	while (!q.empty()) {
+		PII t = q.top();
 		int x = t.second;
-		PQ.pop();
+		q.pop();
 		if (vis[x]) continue;
 		vis[x] = 1;
 		for (int i = 0; i < (int)G[x].size(); i++) {
@@ -30,7 +30,7 @@ void Dijkstra(int s, int n) {
 			int w = G[x][i].first;
 			if (!vis[y] && dis[y] > dis[x] + w) {
 				dis[y] = dis[x] + w;
-				PQ.push(make_pair(dis[y], y));
+				q.push(make_pair(dis[y], y));
 			}
 		}
 	}

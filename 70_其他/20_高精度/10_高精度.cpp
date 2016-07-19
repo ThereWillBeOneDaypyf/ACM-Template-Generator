@@ -37,7 +37,7 @@ struct bint {
 	}
 	void print() {
 		for (int i = l - 1; i >= 0 ; i--)
-printf("%d", w[i]);
+			printf("%d", w[i]);
 		printf("\n");
 	}
 };

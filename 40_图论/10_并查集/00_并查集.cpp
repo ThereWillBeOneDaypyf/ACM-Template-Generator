@@ -1,6 +1,6 @@
 const int MAXN = 128;
-int fa[MAXN], ra[MAXN];
-void init(int n) {
+int n, fa[MAXN], ra[MAXN];
+void init() {
     for (int i = 0; i <= n; i++) {
         fa[i] = i; ra[i] = 0;
     }
