@@ -1,30 +1,32 @@
-约数定理：若$n=\prod_{i=1}^kp_i^{a_i}$，则
+\begin{enumerate}
+\item 约数定理：若$n=\prod_{i=1}^kp_i^{a_i}$，则
 
-1.约数个数$f(n)=\prod_{i=1}^k(a_i+1)$
+\begin{enumerate}
+\item 约数个数$f(n)=\prod_{i=1}^k(a_i+1)$
+\item 约数和$g(n)=\prod_{i=1}^k(\sum_{j=0}^{a_i}p_i^j)$
+\end{enumerate}
 
-2.约数和$g(n)=\prod_{i=1}^k(\sum_{j=0}^{a_i}p_i^j)$
+\item 小于$n$且互素的数之和为$n\varphi(n)/2$
 
-小于$n$且互素的数之和为$n\varphi(n)/2$
+\item 若$gcd(n,i)=1$，则$gcd(n,n-i)=1(1\leq i\leq n)$
 
-若$gcd(n,i)=1$，则$gcd(n,n-i)=1(1\leq i\leq n)$
+\item 错排公式：$D(n)=(n-1)(D(n-2)+D(n-1))=\sum_{i=2}^n\frac{(-1)^kn!}{k!}=[\frac{n!}{e}+0.5]$
 
-错排公式：$D(n)=(n-1)(D(n-2)+D(n-1))=\sum_{i=2}^n\frac{(-1)^kn!}{k!}=[\frac{n!}{e}+0.5]$
+\item 威尔逊定理：$p\ is\ prime\ \Rightarrow (p-1)!\equiv-1(mod\ p)$
 
-威尔逊定理：$p\ is\ prime\ \Rightarrow (p-1)!\equiv-1(mod\ p)$
+\item 欧拉定理：$gcd(a,n)=1\Rightarrow a^{\varphi(n)}\equiv1(mod\ n)$
 
-欧拉定理：$gcd(a,n)=1\Rightarrow a^{\varphi(n)}\equiv1(mod\ n)$
+\item 欧拉定理推广：$gcd(n,p)=1\Rightarrow a^n\equiv a^{n\%\varphi(p)}(mod\ p)$
 
-欧拉定理推广：$gcd(n,p)=1\Rightarrow a^n\equiv a^{n\%\varphi(p)}(mod\ p)$
+\item 素数定理：对于不大于n的素数个数$\pi(n)$，$\lim\limits_{n\to\infty}\pi(n)=\frac{n}{\ln n}$
 
-素数定理：对于不大于n的素数个数$\pi(n)$，$\lim\limits_{n\to\infty}\pi(n)=\frac{n}{\ln n}$
+\item 位数公式：正整数$x$的位数$N=log10(n)+1$
 
-位数公式：正整数$x$的位数$N=log10(n)+1$
+\item 斯特灵公式$n!\approx\sqrt{2\pi n}(\frac{n}{e})^n$
 
-斯特灵公式$n!\approx\sqrt{2\pi n}(\frac{n}{e})^n$
+\item 设$a>1,m,n>0$,则$gcd(a^m-1,a^n-1)=a^{gcd(m,n)}-1$
 
-设$a>1,m,n>0$,则$gcd(a^m-1,a^n-1)=a^{gcd(m,n)}-1$
-
-设$a>b,gcd(a,b)=1$,则$gcd(a^m-b^m,a^n-b^n)=a^{gcd(m,n)}-b^{gcd(m,n)}$
+\item 设$a>b,gcd(a,b)=1$,则$gcd(a^m-b^m,a^n-b^n)=a^{gcd(m,n)}-b^{gcd(m,n)}$
 
 $$
 G=gcd(C_n^1,C_n^2,...,C_n^{n-1})=
@@ -37,17 +39,18 @@ $$
 
 $gcd(Fib(m),Fib(n))=Fib(gcd(m,n))$
 
-若$gcd(m,n)=1$,则:
+\item 若$gcd(m,n)=1$,则:
 
-1.最大不能组合的数为$m*n-m-n$
+\begin{enumerate}
+\item 最大不能组合的数为$m*n-m-n$
+\item 不能组合数个数$N=\frac{(m-1)(n-1)}{2}$
+\end{enumerate}
 
-2.不能组合数个数$N=\frac{(m-1)(n-1)}{2}$
+\item $(n+1)lcm(C_n^0,C_n^1,...,C_n^{n-1},C_n^{n})=lcm(1,2,...,n+1)$
 
-$(n+1)lcm(C_n^0,C_n^1,...,C_n^{n-1},C_n^{n})=lcm(1,2,...,n+1)$
+\item 若$p$为素数，则$(x+y+...+w)^p\equiv x^p+y^p+...+w^p(mod\ p)$
 
-若$p$为素数，则$(x+y+...+w)^p\equiv x^p+y^p+...+w^p(mod\ p)$
-
-卡特兰数：1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012
+\item 卡特兰数：1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012
 
 $h(0)=h(1)=1,h(n)=\frac{(4n-2)h(n-1)}{n+1}=\frac{C_{2n}^n}{n+1}=C_{2n}^n-C_{2n}^{n-1}$
 
@@ -111,3 +114,4 @@ a_{n+m}=\sum_{i=0}^{m-1}b_ia_{n+i}+c\Rightarrow
 \end{matrix}
 \right)
 $$
+\end{enumerate}

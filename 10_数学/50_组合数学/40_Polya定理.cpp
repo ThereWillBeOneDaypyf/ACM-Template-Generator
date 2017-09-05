@@ -5,14 +5,15 @@
 // 正四面体，$\frac{m^4+11m^2}{12}$
 // ---
 // 长度为n的项链串用c种颜色染
-ll solve(int c, int n) {
-	if (n == 0) return 0;
-	ll ans = 0;
-	for (int i = 1; i <= n; i++)
-		ans += Pow(c, __gcd(i, n));
-	if (n & 1)
-		ans += n * Pow(c, n + 1 >> 1);
-	else
-		ans += n / 2 * (1 + c) * Pow(c, n >> 1);
-	return ans / n / 2;
+ll solve(int c, int n)
+{
+    if (n == 0) return 0;
+    ll ans = 0;
+    for (int i = 1; i <= n; i++)
+        ans += Pow(c, __gcd(i, n));
+    if (n & 1)
+        ans += n * Pow(c, n + 1 >> 1);
+    else
+        ans += n / 2 * (1 + c) * Pow(c, n >> 1);
+    return ans / n / 2;
 }
