@@ -2,11 +2,10 @@ struct stack
 {
     int top, node[MAXN];
 } s;
-int G[MAXN][MAXN];  // 邻接矩阵
-int n;  // 顶点个数
+int G[MAXN][MAXN]; // 邻接矩阵
+int n;             // 顶点个数
 void dfs(int x)
 {
-    int i;
     s.node[++s.top] = x;
     for (int i = 0; i < n; i++)
         if (G[i][x] > 0)
@@ -45,14 +44,15 @@ void Fleury(int x)
 int main()
 {
     int i, j;
-    int m, s, t; // 边数，读入的边的起点和终点
+    int m, s, t;            // 边数，读入的边的起点和终点
     int degree, num, start; // 每个顶点的度、奇度顶点个数、欧拉回路的起点
     scanf("%d%d", &n, &m);
     clr(G, 0);
     for (i = 0; i < m; i++)
     {
         scanf("%d%d", &s, &t)
-        G[s - 1][t - 1] = G[t - 1][s - 1] = 1;
+            G[s - 1][t - 1]
+            = G[t - 1][s - 1] = 1;
     }
     num = 0;
     start = 0;
@@ -67,7 +67,9 @@ int main()
             num++;
         }
     }
-    if (num == 0 || num == 2) Fleury(start);
-    else puts("No Euler path");
+    if (num == 0 || num == 2)
+        Fleury(start);
+    else
+        puts("No Euler path");
     return 0;
 }

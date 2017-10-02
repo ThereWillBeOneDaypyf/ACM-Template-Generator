@@ -3,7 +3,6 @@
 使用前用init()进行初始化
 加边使用函数addedge(u,v)
 */
-
 const int maxn = "Edit";
 int n;
 vector<int> G[maxn];

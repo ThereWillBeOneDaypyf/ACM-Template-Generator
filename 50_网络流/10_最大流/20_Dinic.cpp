@@ -1,16 +1,16 @@
 struct Edge
 {
     int from, to, cap, flow;
-    Edge(int u, int v, int c, int f): from(u), to(v), cap(c), flow(f) {}
+    Edge(int u, int v, int c, int f) : from(u), to(v), cap(c), flow(f) {}
 };
 struct Dinic
 {
-    int n, m, s, t;         //结点数，边数（包括反向弧），源点编号和汇点编号
-    vector<Edge> edges;     //边表。edge[e]和edge[e^1]互为反向弧
-    vector<int> G[maxn];    //邻接表，G[i][j]表示节点i的第j条边在e数组中的序号
-    bool vis[maxn];         //BFS使用
-    int d[maxn];            //从起点到i的距离
-    int cur[maxn];          //当前弧下标
+    int n, m, s, t;      //结点数，边数（包括反向弧），源点编号和汇点编号
+    vector<Edge> edges;  //边表。edge[e]和edge[e^1]互为反向弧
+    vector<int> G[maxn]; //邻接表，G[i][j]表示节点i的第j条边在e数组中的序号
+    bool vis[maxn];      //BFS使用
+    int d[maxn];         //从起点到i的距离
+    int cur[maxn];       //当前弧下标
     void init(int n)
     {
         this->n = n;

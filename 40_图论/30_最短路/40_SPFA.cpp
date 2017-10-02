@@ -21,7 +21,7 @@ bool SPFA(int s, int n)
     clr(dis, 0x3f);
     clr(inqueue, 0);
     dis[s] = 0;
-    queue<int> q;   // 待优化的节点入队
+    queue<int> q; // 待优化的节点入队
     q.push(s);
     while (!q.empty())
     {

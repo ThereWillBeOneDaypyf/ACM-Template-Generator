@@ -16,7 +16,7 @@ int kmp(char x[], int m, char y[], int n)
 {
     int i, j, ans;
     i = j = ans = 0;
-    initkmp (x, m);
+    initkmp(x, m);
     while (i < n)
     {
         while (j != -1 && y[i] != x[j]) j = ne[j];

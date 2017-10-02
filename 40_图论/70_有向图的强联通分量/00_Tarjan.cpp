@@ -1,4 +1,4 @@
-vector <int> G[maxn];
+vector<int> G[maxn];
 int pre[maxn], lowlink[maxn], sccno[maxn], dfs_clock, scc_cnt;
 stack<int> S;
 void add_edge(int u, int v)

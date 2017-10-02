@@ -1,18 +1,18 @@
 struct Edge
 {
     int from, to, cap, flow;
-    Edge(int u, int v, int c, int f): from(u), to(v), cap(c), flow(f) {}
+    Edge(int u, int v, int c, int f) : from(u), to(v), cap(c), flow(f) {}
 };
 struct ISAP
 {
-    int n, m, s, t;         //结点数，边数（包括反向弧），源点编号和汇点编号
-    vector<Edge> edges;     //边表。edges[e]和edges[e^1]互为反向弧
-    vector<int> G[maxn];    //邻接表，G[i][j]表示结点i的第j条边在e数组中的序号
-    bool vis[maxn];         //BFS使用
-    int d[maxn];            //起点到i的距离
-    int cur[maxn];          //当前弧下标
-    int p[maxn];            //可增广路上的一条弧
-    int num[maxn];          //距离标号计数
+    int n, m, s, t;      //结点数，边数（包括反向弧），源点编号和汇点编号
+    vector<Edge> edges;  //边表。edges[e]和edges[e^1]互为反向弧
+    vector<int> G[maxn]; //邻接表，G[i][j]表示结点i的第j条边在e数组中的序号
+    bool vis[maxn];      //BFS使用
+    int d[maxn];         //起点到i的距离
+    int cur[maxn];       //当前弧下标
+    int p[maxn];         //可增广路上的一条弧
+    int num[maxn];       //距离标号计数
     void init(int n)
     {
         this->n = n;
@@ -100,7 +100,7 @@ struct ISAP
                     break;
                 }
             }
-            if (!ok)    //Retreat
+            if (!ok) //Retreat
             {
                 int m = n - 1;
                 for (int i = 0; i < G[x].size(); i++)

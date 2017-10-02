@@ -1,7 +1,7 @@
 struct Edge
 {
     int from, to, cap, flow, cost;
-    Edge(int u, int v, int c, int f, int w): from(u), to(v), cap(c), flow(f), cost(w) {}
+    Edge(int u, int v, int c, int f, int w) : from(u), to(v), cap(c), flow(f), cost(w) {}
 };
 
 struct MCMF
@@ -9,13 +9,13 @@ struct MCMF
     int n, m;
     vector<Edge> edges;
     vector<int> G[maxn];
-    int inq[maxn];      //是否在队列中
-    int d[maxn];        //bellmanford
-    int p[maxn];        //上一条弧
-    int a[maxn];        //可改进量
+    int inq[maxn]; //是否在队列中
+    int d[maxn];   //bellmanford
+    int p[maxn];   //上一条弧
+    int a[maxn];   //可改进量
     void init(int n)
     {
-        this-> n = n;
+        this->n = n;
         for (int i = 0; i < n; i++) G[i].clear();
         edges.clear();
     }
@@ -58,7 +58,7 @@ struct MCMF
                 }
             }
         }
-        if (d[t] == INF) return false;   // 当没有可增广的路时退出
+        if (d[t] == INF) return false; // 当没有可增广的路时退出
         flow += a[t];
         cost += (ll)d[t] * (ll)a[t];
         for (int u = t; u != s; u = edges[p[u]].from)

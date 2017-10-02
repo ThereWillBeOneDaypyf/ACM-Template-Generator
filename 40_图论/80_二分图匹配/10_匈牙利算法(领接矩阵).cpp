@@ -10,8 +10,8 @@ uN是匹配左边的顶点数,vN是匹配右边的顶点数
 顶点编号从0开始的
 */
 const int maxn = "Edit";
-int uN, vN; //u,v的数目,使用前面必须赋值
-int g[maxn][maxn];//邻接矩阵
+int uN, vN;        //u,v的数目,使用前面必须赋值
+int g[maxn][maxn]; //邻接矩阵
 int linker[maxn];
 bool used[maxn];
 bool dfs(int u)
@@ -35,7 +35,7 @@ int hungary()
     for (int u = 0; u < uN; u++)
     {
         clr(used, 0);
-        if (dfs(u))res++;
+        if (dfs(u)) res++;
     }
     return res;
 }

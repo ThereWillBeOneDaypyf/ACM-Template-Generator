@@ -2,8 +2,7 @@
 // 要求边权值为非负数 模板为有向边
 // dis[x]为起点到点x的最短路 inf表示无法走到
 // 记得初始化
-const int N = 100;  // 点数最大值
-const int INF = 0x3f3f3f3f;
+const int N = "Edit"; // 点数最大值
 int G[N][N], dis[N];
 bool vis[N];
 void init(int n)

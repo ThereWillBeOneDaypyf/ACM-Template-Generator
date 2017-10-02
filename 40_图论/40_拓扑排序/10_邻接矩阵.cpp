@@ -2,9 +2,9 @@
 // Ans存放拓排结果，G为邻接矩阵，deg为入度信息
 // 排序成功返回1，存在环返回0
 const int maxn = "Edit";
-int Ans[maxn];      // 存放拓扑排序结果
-int G[maxn][maxn];  // 存放图信息
-int deg[maxn];      // 存放点入度信息
+int Ans[maxn];     // 存放拓扑排序结果
+int G[maxn][maxn]; // 存放图信息
+int deg[maxn];     // 存放点入度信息
 void init()
 {
     clr(G, 0);

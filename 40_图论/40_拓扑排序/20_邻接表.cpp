@@ -10,7 +10,7 @@ map<PII, bool> S;
 void init(int n)
 {
     S.clear();
-    for (int i = 0; i < n; i++)G[i].clear();
+    for (int i = 0; i < n; i++) G[i].clear();
     clr(deg, 0);
     clr(Ans, 0);
 }

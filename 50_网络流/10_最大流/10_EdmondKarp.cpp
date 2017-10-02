@@ -1,15 +1,15 @@
 struct Edge
 {
     int from, to, cap, flow;
-    Edge(int u, int v, int c, int f): from(u), to(v), cap(c), flow(f) {}
+    Edge(int u, int v, int c, int f) : from(u), to(v), cap(c), flow(f) {}
 };
-struct EdmonsKarp           //时间复杂度O(v*E*E)
+struct EdmonsKarp //时间复杂度O(v*E*E)
 {
     int n, m;
-    vector<Edge> edges;     //边数的两倍
-    vector<int> G[maxn];    //邻接表，G[i][j]表示节点i的第j条边在e数组中的序号
-    int a[maxn];            //起点到i的可改进量
-    int p[maxn];            //最短路树上p的入弧编号
+    vector<Edge> edges;  //边数的两倍
+    vector<int> G[maxn]; //邻接表，G[i][j]表示节点i的第j条边在e数组中的序号
+    int a[maxn];         //起点到i的可改进量
+    int p[maxn];         //最短路树上p的入弧编号
     void init(int n)
     {
         for (int i = 0; i < n; i++) G[i].clear();
@@ -18,7 +18,7 @@ struct EdmonsKarp           //时间复杂度O(v*E*E)
     void AddEdge(int from, int to, int cap)
     {
         edges.pb(Edge(from, to, cap, 0));
-        edges.pb(Edge(to, from, 0, 0));  //反向弧
+        edges.pb(Edge(to, from, 0, 0)); //反向弧
         m = edges.size();
         G[from].pb(m - 2);
         G[to].pb(m - 1);
