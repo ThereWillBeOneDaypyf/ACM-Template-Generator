@@ -1,70 +1,70 @@
+// ---
+// 多模式匹配，返回主串中有多少模式串
+// ---
+const int maxn = "Edit"
 struct Trie
 {
-    int next[500010][26], fail[500010], end[500010];
-    int root, L;
+    int ch[maxn][26], f[maxn], val[maxn];
+    int sz, rt;
     int newnode()
     {
-        clr(next[L], -1);
-        end[L++] = 0;
-        return L - 1;
+        clr(ch[sz], -1), val[sz] = 0;
+        return sz++;
     }
-    void init()
+    void init() { sz = 0, rt = newnode(); }
+    inline int idx(char c) { return c - 'A'; };
+    void insert(const char* s)
     {
-        L = 0;
-        root = newnode();
-    }
-    void insert(const string& buf)
-    {
-        int len = buf.length();
-        int now = root;
-        for (int i = 0; i < len; i++)
+        int u = 0, n = strlen(s);
+        for (int i = 0; i < n; i++)
         {
-            if (next[now][buf[i] - 'a'] == -1)
-                next[now][buf[i] - 'a'] = newnode();
-            now = next[now][buf[i] - 'a'];
+            int c = idx(s[i]);
+            if (ch[u][c] == -1) ch[u][c] = newnode();
+            u = ch[u][c];
         }
-        end[now]++;
+        val[u]++;
     }
     void build()
     {
-        queue<int> Q;
-        fail[root] = root;
-        for (int i = 0; i < 26; i++)
-            if (next[root][i] == -1)
-                next[root][i] = root;
-            else
-            {
-                fail[next[root][i]] = root;
-                Q.push(next[root][i]);
-            }
-        while (!Q.empty())
+        queue<int> q;
+        f[rt] = rt;
+        for (int c = 0; c < 26; c++)
         {
-            int now = Q.front();
-            Q.pop();
-            for (int i = 0; i < 26; i++)
-                if (next[now][i] == -1)
-                    next[now][i] = next[fail[now]][i];
-                else
+            if (~ch[rt][c])
+                f[ch[rt][c]] = rt, q.push(ch[rt][c]);
+            else
+                ch[rt][c] = rt;
+        }
+        while (!q.empty())
+        {
+            int u = q.front();
+            q.pop();
+            for (int c = 0; c < 26; c++)
+            {
+                if (~ch[u][c])
                 {
-                    fail[next[now][i]] = next[fail[now]][i];
-                    Q.push(next[now][i]);
+                    f[ch[u][c]] = ch[f[u]][c];
+                    q.push(ch[u][c]);
                 }
+                else
+                    ch[u][c] = ch[f[u]][c];
+            }
         }
     }
-    int query(const string& buf)
+    int query(const char* s)
     {
-        int len = buf.length();
-        int now = root;
+        int u = rt, n = strlen(s);
         int res = 0;
-        for (int i = 0; i < len; i++)
+        for (int i = 0; i < n; i++)
         {
-            now = next[now][buf[i] - 'a'];
-            int temp = now;
-            while (temp != root)
+            int c = idx(s[i]);
+            u = ch[u][c];
+            int tmp = u;
+            while (tmp != rt)
             {
-                res += end[temp];
-                end[temp] = 0;
-                temp = fail[temp];
+                res += val[tmp];
+                end[tmp] = 0;
+                tmp = f[tmp];
             }
         }
         return res;

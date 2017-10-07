@@ -1,5 +1,5 @@
 // seg[rt]用于存放懒惰标记，注意PushDown时标记的传递
-const int maxn = 101010;
+const int maxn = "Edit";
 int seg[maxn << 2], sum[maxn << 2];
 
 void PushUp(int rt)

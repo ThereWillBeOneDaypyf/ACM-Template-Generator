@@ -1,9 +1,9 @@
 // ---
 // $O(n^3)$求出任意两点间最短路
 // ---
-const int MAXN = "Edit";
+const int maxn = "Edit";
 const int INF = 0x3f3f3f3f;
-int G[MAXN][MAXN];
+int G[maxn][maxn];
 void init(int n)
 {
     clr(G, 0x3f);

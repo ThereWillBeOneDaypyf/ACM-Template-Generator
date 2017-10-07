@@ -6,7 +6,7 @@ bool isconvex(point poly[], int n)
     set(s, 0);
     for (int i = 0; i < n; i++)
     {
-        s[sgn((poly[(i + 1) % n] - poly[i]) ^ (poly[(i + 2) % n] - poly[i]) ) + 1] = 1;
+        s[sgn((poly[(i + 1) % n] - poly[i]) ^ (poly[(i + 2) % n] - poly[i])) + 1] = 1;
         if (s[0] && s[2]) return 0;
     }
     return 1;

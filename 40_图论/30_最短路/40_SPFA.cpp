@@ -1,11 +1,10 @@
 // G[u] = mp(v, w)
 // SPFA()返回0表示存在负环
-const int MAXN = "Edit";
-const int INF = 0x3f3f3f3f;
-vector<pair<int, int> > G[MAXN];
-bool vis[MAXN];
-int dis[MAXN];
-int inqueue[MAXN];
+const int maxn = "Edit";
+vector<pair<int, int> > G[maxn];
+bool vis[maxn];
+int dis[maxn];
+int inqueue[maxn];
 void init(int n)
 {
     for (int i = 0; i < n; i++)

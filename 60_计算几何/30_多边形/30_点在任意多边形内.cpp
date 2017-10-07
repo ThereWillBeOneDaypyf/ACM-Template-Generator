@@ -14,7 +14,7 @@ int PointInPoly(point p, point poly[], int n)
     {
         side.s = poly[i];
         side.e = poly[(i + 1) % n];
-        if (PointOnSeg(p, side))return 0;
+        if (PointOnSeg(p, side)) return 0;
         //如果平行轴则不考虑
         if (sgn(side.s.y - side.e.y) == 0)
             continue;
@@ -26,7 +26,8 @@ int PointInPoly(point p, point poly[], int n)
         {
             if (sgn(side.e.y - side.s.y) > 0) cnt++;
         }
-        else if (segxseg(ray, side)) cnt++;
+        else if (segxseg(ray, side))
+            cnt++;
     }
     return cnt % 2 == 1 ? 1 : -1;
 }

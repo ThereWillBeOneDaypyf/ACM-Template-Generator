@@ -1,7 +1,6 @@
 // pair<权值, 点>
 // 记得初始化
 const int maxn = "Edit";
-const int INF = 0x3f3f3f3f;
 typedef pair<int, int> PII;
 typedef vector<PII> VII;
 VII G[maxn];

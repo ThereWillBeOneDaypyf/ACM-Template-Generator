@@ -1,6 +1,8 @@
 //倍增算法构造后缀数组,复杂度O(nlogn)
+const int maxn = "Edit";
 char s[maxn];
-int sa[maxn], t[maxn], t2[maxn], c[maxn], rnk[maxn], height[maxn];
+int sa[maxn], t[maxn], t2[maxn], c[maxn];
+int rnk[maxn], height[maxn];
 //n为字符串的长度,字符集的值为0~m-1
 void build_sa(int m, int n)
 {
@@ -50,11 +52,11 @@ void initrmq(int n)
         dp[i][0] = height[i];
     for (int j = 1; (1 << j) <= n; j++)
         for (int i = 1; i + (1 << j) - 1 <= n; i++)
-            dp[i][j] = min(dp[i][j - 1], dp[i + (1 << (j - 1))][j - 1]);
+            dp[i][j] = min(dp[i][j - 1],
+                           dp[i + (1 << (j - 1))][j - 1]);
 }
 int rmq(int l, int r)
 {
-    if (l > r) swap(l, r);
     int k = 0;
     while ((1 << (k + 1)) <= r - l + 1) k++;
     return min(dp[l][k], dp[r - (1 << k) + 1][k]);

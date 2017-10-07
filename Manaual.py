@@ -22,7 +22,6 @@ TexHead = r"""
     commentstyle = \color[RGB]{0,128,0},
     keywordstyle = \color[RGB]{0,0,255},
     basicstyle   = \large\ttfamily,
-    stringstyle  = \color[RGB]{148,0,209}\ttfamily,
     rulesepcolor = \color{red!20!green!20!blue!20},
     showstringspaces = false,
 }

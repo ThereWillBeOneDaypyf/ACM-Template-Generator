@@ -12,7 +12,7 @@ int cnt;
 for (int i = 1; i <= _max; i++)
 {
     cnt = 0;
-    for (long long j = i; j <= _max; j += i)
+    for (ll j = i; j <= _max; j += i)
         cnt += b[j];
     ans += 1LL * mu[i] * cnt * cnt;
 }

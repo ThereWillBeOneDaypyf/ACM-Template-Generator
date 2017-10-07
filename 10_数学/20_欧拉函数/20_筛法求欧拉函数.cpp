@@ -1,4 +1,4 @@
-const int N = 10001;
+const int N = "Edit";
 int phi[N] = {0, 1};
 void CalEuler()
 {

@@ -1,4 +1,4 @@
-const int maxn = 50010;
+const int maxn = "Edit";
 int sum[maxn << 2];
 void PushUp(int rt)
 {

@@ -1,3 +1,4 @@
+const int maxn = "Edit";
 struct Edge
 {
     int from, to, cap, flow;
@@ -19,7 +20,7 @@ struct ISAP
         for (int i = 0; i < n; i++) G[i].clear();
         edges.clear();
     }
-    void addedge(int from, int to, int cap)
+    void addEdge(int from, int to, int cap)
     {
         edges.pb(Edge(from, to, cap, 0));
         edges.pb(Edge(to, from, 0, 0));

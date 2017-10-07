@@ -8,15 +8,15 @@ struct Complex
         x = _x;
         y = _y;
     }
-    Complex operator-(const Complex &b) const
+    Complex operator-(const Complex& b) const
     {
         return Complex(x - b.x, y - b.y);
     }
-    Complex operator+(const Complex &b) const
+    Complex operator+(const Complex& b) const
     {
         return Complex(x + b.x, y + b.y);
     }
-    Complex operator*(const Complex &b) const
+    Complex operator*(const Complex& b) const
     {
         return Complex(x * b.x - y * b.y, x * b.y + y * b.x);
     }
@@ -28,14 +28,13 @@ struct Complex
 */
 void change(Complex y[], int len)
 {
-    int i, j, k;
-    for (i = 1, j = len / 2; i < len - 1; i++)
+    for (int i = 1, j = len / 2; i < len - 1; i++)
     {
         if (i < j)
             swap(y[i], y[j]);
         //交换互为小标反转的元素，i<j保证交换一次
         //i做正常的+1，j左反转类型的+1,始终保持i和j是反转的
-        k = len / 2;
+        int k = len / 2;
         while (j >= k)
         {
             j -= k;

@@ -1,5 +1,5 @@
 // O(n)求解最长回文子串
-const int N = 1000100;
+const int N = "Edit";
 char s[N], str[N << 1];
 int p[N << 1];
 void Manacher(char s[], int &n)

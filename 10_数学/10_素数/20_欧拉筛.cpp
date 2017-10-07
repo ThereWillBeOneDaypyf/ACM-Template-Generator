@@ -2,9 +2,9 @@
 // $O(n)$得到欧拉函数$phi[]$、素数表$prime[]$、素数个数$tot$
 // 传入的n为函数定义域上界
 // ---
-const int MAXN = 100010;
-bool vis[MAXN];
-int tot, phi[MAXN], prime[MAXN];
+const int maxn = "Edit";
+bool vis[maxn];
+int tot, phi[maxn], prime[maxn];
 void CalPhi(int n)
 {
     clr(vis, 0);

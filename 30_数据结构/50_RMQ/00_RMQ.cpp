@@ -1,6 +1,6 @@
-const int MAXN = 200000 + 100;
-int mmax[MAXN][30], mmin[MAXN][30];
-int a[MAXN], n, k;
+const int maxn = "Edit";
+int mmax[maxn][30], mmin[maxn][30];
+int a[maxn], n, k;
 void init()
 {
     for (int i = 1; i <= n; i++)
@@ -26,7 +26,7 @@ int rmq(int l, int r, int op)
     return min(mmin[l][k], mmin[r - (1 << k) + 1][k]);
 }
 
-// 二维情况
+// 二维RMQ
 void init()
 {
     for (int i = 0; (1 << i) <= n; i++)

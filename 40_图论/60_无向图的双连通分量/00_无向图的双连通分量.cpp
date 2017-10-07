@@ -1,4 +1,5 @@
 //割顶的bccno无意义
+const int maxn = "Edit";
 int pre[maxn], iscut[maxn], bccno[maxn], dfs_clock, bcc_cnt;
 vector<int> G[maxn], bcc[maxn];
 stack<PII> s;
@@ -26,12 +27,12 @@ int dfs(int u, int fa)
             s.push(e);
             child++;
             int lowv = dfs(v, u);
-            lowu = min(lowu, lowv);     //用后代的low函数更新自己
+            lowu = min(lowu, lowv); //用后代的low函数更新自己
             if (lowv >= pre[u])
             {
                 iscut[u] = true;
                 bcc_cnt++;
-                bcc[bcc_cnt].clear();   //注意！bcc从1开始编号
+                bcc[bcc_cnt].clear(); //注意！bcc从1开始编号
                 for (;;)
                 {
                     PII x = s.top();
@@ -53,7 +54,7 @@ int dfs(int u, int fa)
         else if (pre[v] < pre[u] && v != fa)
         {
             s.push(e);
-            lowu = min(lowu, pre[v]);   //用反向边更新自己
+            lowu = min(lowu, pre[v]); //用反向边更新自己
         }
     }
     if (fa < 0 && child == 1) iscut[u] = 0;

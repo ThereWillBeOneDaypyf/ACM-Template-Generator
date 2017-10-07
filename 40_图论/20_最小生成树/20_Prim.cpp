@@ -1,10 +1,9 @@
 // 耗费矩阵cost[][],标号从0开始,0~n-1
 // 返回最小生成树的权值,返回-1表示原图不连通
-const int INF = 0x3f3f3f3f;
-const int MAXN = 110;
-bool vis[MAXN];
-int lowc[MAXN];
-int Prim(int cost[][MAXN], int n)
+const int maxn = "Edit";
+bool vis[maxn];
+int lowc[maxn];
+int Prim(int cost[][maxn], int n)
 {
     int ans = 0;
     clr(vis, 0);

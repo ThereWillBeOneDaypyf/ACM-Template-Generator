@@ -2,22 +2,17 @@
 // $O(\log n)$查询和修改数组的前缀和
 // ---
 // 注意下标应从1开始 n是全局变量
+const int maxn = "Edit";
 int bit[N], n;
-int sum(int i)
+int sum(int x)
 {
     int s = 0;
-    while (i)
-    {
+    for (int i = x; i; i -= i & -i)
         s += bit[i];
-        i -= i & -i;
-    }
     return s;
 }
-void add(int i, int x)
+void add(int x, int v)
 {
-    while (i <= n)
-    {
-        bit[i] += x;
-        i += i & -i;
-    }
+    for (int i = x; i <= n; i += i & -i)
+        bit[i] += v;
 }

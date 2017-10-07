@@ -1,3 +1,4 @@
+const int maxn = "Edit";
 vector<int> G[maxn];
 int pre[maxn], lowlink[maxn], sccno[maxn], dfs_clock, scc_cnt;
 stack<int> S;

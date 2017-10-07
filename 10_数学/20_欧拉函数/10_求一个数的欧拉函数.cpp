@@ -1,6 +1,6 @@
-long long Euler(long long n)
+ll Euler(ll n)
 {
-    long long rt = n;
+    ll rt = n;
     for (int i = 2; i * i <= n; i++)
         if (n % i == 0)
         {

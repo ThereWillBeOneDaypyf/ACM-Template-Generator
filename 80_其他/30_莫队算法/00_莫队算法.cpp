@@ -5,20 +5,14 @@ struct query
 {
     int L, R, id;
 } node[maxn];
-bool cmp(query a, query b)
-{
-    if (a.L / unit != b.L / unit)
-        return a.L / unit < b.L / unit;
-    else
-        return a.R < b.R;
-}
+
 void solve()
 {
     tmp = 0;
     clr(num, 0);
     clr(ans, 0);
-    int L = 1;
-    int R = 0;
+    sort(node, node + m, [](query a, query b) { return a.l / unit < b.l / unit || a.l / unit == b.l / unit && a.r < b.r; });
+    int L = 1, R = 0;
     for (int i = 0; i < m; i++)
     {
         while (node[i].L < L) add(a[--L]);

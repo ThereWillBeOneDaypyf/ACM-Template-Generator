@@ -1,3 +1,4 @@
+const int maxn = "Edit";
 struct Edge
 {
     int from, to, cap, flow;

@@ -11,10 +11,7 @@ ll Cal(int l, int r, int k, int dis)
         {
             int y = v[j];
             while (t % y == 0)
-            {
-                dp[j] += dis;
-                t /= y;
-            }
+                dp[j] += dis, t /= y;
         }
         res = res * (ll)t % k;
     }
@@ -22,7 +19,7 @@ ll Cal(int l, int r, int k, int dis)
 }
 ll Comb(int n, int m, int k)
 {
-    set(dp, 0);
+    clr(dp, 0);
     v.clear();
     int tmp = k;
     for (int i = 2; i * i <= tmp; i++)
@@ -31,19 +28,14 @@ ll Comb(int n, int m, int k)
         {
             int num = 0;
             while (tmp % i == 0)
-            {
-                tmp /= i;
-                num++;
-            }
+                tmp /= i, num++;
             v.pb(i);
         }
     }
     if (tmp != 1) v.pb(tmp);
     ll ans = Cal(n - m + 1, n, k, 1);
     for (int j = 0; j < v.size(); j++)
-    {
         ans = ans * Pow(v[j], dp[j], k) % k;
-    }
     ans = ans * inv(Cal(2, m, k, -1), k) % k;
     return ans;
 }

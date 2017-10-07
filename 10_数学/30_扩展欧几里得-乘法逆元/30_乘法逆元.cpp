@@ -2,7 +2,7 @@
 ll inv(ll a, ll m)
 {
     ll x, y;
-    ll d = exgcd(a, m,  x, y);
+    ll d = exgcd(a, m, x, y);
     return d == 1 ? (x + m) % m : -1;
 }
 // a < m 且 m为素数时，有以下两种求法
@@ -12,5 +12,5 @@ ll inv(ll a, ll m)
 }
 ll inv(ll a, ll m)
 {
-    return Pow(a, m – 2, m);
+    return Pow(a, m - 2, m);
 }
