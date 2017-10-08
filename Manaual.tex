@@ -16,7 +16,7 @@
     columns     = fullflexible,
     commentstyle = \color[RGB]{0,128,0},
     keywordstyle = \color[RGB]{0,0,255},
-    basicstyle   = \large\ttfamily,
+    basicstyle   = \small\ttfamily,
     rulesepcolor = \color{red!20!green!20!blue!20},
     showstringspaces = false,
 }
@@ -29,7 +29,7 @@
 \tableofcontents\clearpage
 \end{titlepage}
 \setcounter{section}{-1}
-\clearpage\section{头文件}
+\clearpage\section{Include}
 \begin{lstlisting}
 #include <bits/stdc++.h>
 using namespace std;
@@ -65,13 +65,13 @@ func !Run()
     exec "!./%<"
 endfunc
 \end{lstlisting}
-\clearpage\section{数学}
-\subsection{素数}
-\subsubsection{埃氏筛}
+\clearpage\section{Math}
+\subsection{Prime}
+\subsubsection{Eratosthenes Sieve}
 \begin{lstlisting}
 \end{lstlisting}
-$O(n\log\log n)$筛出maxn内所有素数
-$notprime[i] = 0/1$ 0为素数 1为非素数
+$O(n\log\log n)$筛出maxn内所有素数\\
+$notprime[i] = 0/1$ 0为素数 1为非素数\\
 \begin{lstlisting}
 const int maxn = "Edit";
 bool notprime[maxn] = {1, 1};   // 0 && 1 为非素数
@@ -83,10 +83,10 @@ void GetPrime()
                 notprime[j] = 1;
 }
 \end{lstlisting}
-\subsubsection{欧拉筛}
+\subsubsection{Eular Sieve}
 \begin{lstlisting}
 \end{lstlisting}
-$O(n)$得到欧拉函数$phi[]$、素数表$prime[]$、素数个数$tot$
+$O(n)$得到欧拉函数$phi[]$、素数表$prime[]$、素数个数$tot$\\
 传入的n为函数定义域上界
 \begin{lstlisting}
 const int maxn = "Edit";
@@ -100,10 +100,7 @@ void CalPhi(int n)
     for (int i = 2; i < n; i++)
     {
         if (!vis[i])
-        {
-            prime[tot++] = i;
-            phi[i] = i - 1;
-        }
+            prime[tot++] = i, phi[i] = i - 1;
         for (int j = 0; j < tot; j++)
         {
             if (i * prime[j] > n) break;
@@ -113,15 +110,16 @@ void CalPhi(int n)
                 phi[i * prime[j]] = phi[i] * prime[j];
                 break;
             }
-            else phi[i * prime[j]] = phi[i] * (prime[j] - 1);
+            else
+                phi[i * prime[j]] = phi[i] * (prime[j] - 1);
         }
     }
 }
 \end{lstlisting}
-\subsubsection{分解质因数}
+\subsubsection{Prime Factorization}
 \begin{lstlisting}
 \end{lstlisting}
-函数返回素因数个数
+函数返回素因数个数\\
 数组以$fact[i][0]^{fact[i][1]}$的形式保存第i个素因数
 \begin{lstlisting}
 ll fact[100][2];
@@ -131,26 +129,20 @@ int getFactors(ll x)
     for (int i = 0; prime[i] <= x / prime[i]; i++)
     {
         fact[cnt][1] = 0;
-        if (x % prime[i] == 0 )
+        if (x % prime[i] == 0)
         {
             fact[cnt][0] = prime[i];
             while (x % prime[i] == 0)
-            {
-                fact[cnt][1]++;
-                x /= prime[i];
-            }
+                fact[cnt][1]++, x /= prime[i];
             cnt++;
         }
     }
     if (x != 1)
-    {
-        fact[cnt][0] = x;
-        fact[cnt++][1] = 1;
-    }
+        fact[cnt][0] = x, fact[cnt++][1] = 1;
     return cnt;
 }
 \end{lstlisting}
-\subsubsection{随机素数判定}
+\subsubsection{Miller Rabin}
 \begin{lstlisting}
 \end{lstlisting}
 $O(s\log n)$内判定$2^{63}$内的数是不是素数，$s$为测定次数
@@ -177,8 +169,36 @@ bool Miller_Rabin(ll n, int s)
     return 1;
 }
 \end{lstlisting}
-\subsection{欧拉函数}
-\subsubsection{求一个数的欧拉函数}
+\subsubsection{Segment Sieve}
+\begin{lstlisting}
+\end{lstlisting}
+对区间$[a,b)$内的整数执行筛法。\\
+函数返回区间内素数个数\\
+is\_prime[i-a]=true表示i是素数\\
+$a<b \le 10^{12}, b-a \le 10^6$
+\begin{lstlisting}
+int segment_sieve(ll a, ll b)
+{
+    int tot = 0;
+    for (ll i = 0; i * i < b; ++i)
+        is_prime_small[i] = true;
+    for (ll i = 0; i < b - a; ++i)
+        is_prime[i] = true;
+    for (ll i = 2; i * i < b; ++i)
+        if (is_prime_small[i])
+        {
+            for (ll j = 2 * i; j * j < b; j += i)
+                is_prime_small[j] = false;
+            for (ll j = max(2LL, (a + i - 1) / i) * i; j < b; j += i)
+                is_prime[j - a] = false;
+        }
+    for (ll i = 0; i < b - a; ++i)
+        if (is_prime[i]) prime[tot++] = i + a;
+    return tot;
+}
+\end{lstlisting}
+\subsection{Eular-phi}
+\subsubsection{Eular}
 \begin{lstlisting}
 ll Euler(ll n)
 {
@@ -193,22 +213,23 @@ ll Euler(ll n)
     return rt;
 }
 \end{lstlisting}
-\subsubsection{筛法求欧拉函数}
+\subsubsection{Sieve}
 \begin{lstlisting}
 const int N = "Edit";
 int phi[N] = {0, 1};
 void CalEuler()
 {
     for (int i = 2; i < N; i++)
-        if (!phi[i]) for (int j = i; j < N; j += i)
+        if (!phi[i])
+            for (int j = i; j < N; j += i)
             {
                 if (!phi[j]) phi[j] = j;
                 phi[j] = phi[j] / i * (i - 1);
             }
 }
 \end{lstlisting}
-\subsection{扩展欧几里得-乘法逆元}
-\subsubsection{扩展欧几里得}
+\subsection{Exgcd-Inv}
+\subsubsection{Extended Euclidean}
 \begin{lstlisting}
 ll exgcd(ll a, ll b, ll &x, ll &y)
 {
@@ -220,7 +241,7 @@ ll exgcd(ll a, ll b, ll &x, ll &y)
     return d;
 }
 \end{lstlisting}
-\subsubsection{求ax+by=c的解}
+\subsubsection{ax+by=c}
 \begin{lstlisting}
 // 引用返回通解: X = x + k * dx, Y = y – k * dy
 // 引用返回的x是最小非负整数解，方程无解函数返回0
@@ -239,27 +260,25 @@ bool solve(ll a, ll b, ll c, ll &x, ll &y, ll &dx, ll &dy)
     return 1;
 }
 \end{lstlisting}
-\subsubsection{乘法逆元}
+\subsubsection{Multiplicative Inverse Modulo}
 \begin{lstlisting}
-// 利用exgcd求a在模m下的逆元，需要保证gcd(a, m) == 1.
+\end{lstlisting}
+利用exgcd求$a$在模$m$下的逆元，需要保证$gcd(a, m) == 1$.
+\begin{lstlisting}
 ll inv(ll a, ll m)
 {
     ll x, y;
     ll d = exgcd(a, m, x, y);
     return d == 1 ? (x + m) % m : -1;
 }
-// a < m 且 m为素数时，有以下两种求法
-ll inv(ll a, ll m)
-{
-    return a == 1 ? 1 : inv(m % a, m) * (m - m / a) % m;
-}
-ll inv(ll a, ll m)
-{
-    return Pow(a, m - 2, m);
-}
 \end{lstlisting}
-\subsection{模线性方程组}
-\subsubsection{中国剩余定理}
+$a < m$ 且 $m$为素数时，有以下两种求法
+\begin{lstlisting}
+ll inv(ll a, ll m) { return a == 1 ? 1 : inv(m % a, m) * (m - m / a) % m; }
+ll inv(ll a, ll m) { return Pow(a, m - 2, m); }
+\end{lstlisting}
+\subsection{Modulo-Linear-Equation}
+\subsubsection{Chinese Remainder Theory}
 \begin{lstlisting}
 // X = r[i] (mod m[i]); 要求m[i]两两互质
 // 引用返回通解X = re + k * mo;
@@ -276,7 +295,7 @@ void crt(ll r[], ll m[], ll n, ll &re, ll &mo)
     re = (re + mo) % mo;
 }
 \end{lstlisting}
-\subsubsection{一般模线性方程组}
+\subsubsection{ExCRT}
 \begin{lstlisting}
 // X = r[i] (mod m[i]); m[i]可以不两两互质
 // 引用返回通解X = re + k * mo; 函数返回是否有解
@@ -297,8 +316,8 @@ bool excrt(ll r[], ll m[], ll n, ll &re, ll &mo)
     return 1;
 }
 \end{lstlisting}
-\subsection{组合数学}
-\subsubsection{一般组合数}
+\subsection{Combinatorics}
+\subsubsection{Combination}
 \begin{lstlisting}
 \end{lstlisting}
 $0 \leq m \leq n \leq 1000$
@@ -327,14 +346,13 @@ void CalFact()
     for (int i = 1; i < maxn; i++)
         f[i] = (f[i - 1] * i) % mod;
 }
-ll C(int n, int m)
-{
-    return f[n] * inv(f[m] * f[n - m] % mod, mod) % mod;
-}
+ll C(int n, int m) { return f[n] * inv(f[m] * f[n - m] % mod, mod) % mod; }
 \end{lstlisting}
-\subsubsection{Lucas定理}
+\subsubsection{Lucas}
 \begin{lstlisting}
-// 1 <= n, m <= 1000000000, 1 < p < 100000, p是素数
+\end{lstlisting}
+$1 \leq n, m \leq 1000000000, 1 < p < 100000$, p是素数
+\begin{lstlisting}
 const int maxp = 100010;
 ll f[maxp];
 void CalFact(ll p)
@@ -351,15 +369,16 @@ ll Lucas(ll n, ll m, ll p)
         ll a = n % p, b = m % p;
         if (a < b) return 0;
         ret = (ret * f[a] * Pow(f[b] * f[a - b] % p, p - 2, p)) % p;
-        n /= p;
-        m /= p;
+        n /= p, m /= p;
     }
     return ret;
 }
 \end{lstlisting}
-\subsubsection{大组合数}
+\subsubsection{Big-combination}
 \begin{lstlisting}
-// 0 <= n <= 109, 0 <= m <= 104, 1 <= k <= 109+7
+\end{lstlisting}
+$0 \leq n \leq 10^9, 0 \leq m \leq 10^4, 1 \leq k \leq 10^9+7$
+\begin{lstlisting}
 vector<int> v;
 int dp[110];
 ll Cal(int l, int r, int k, int dis)
@@ -401,13 +420,13 @@ ll Comb(int n, int m, int k)
     return ans;
 }
 \end{lstlisting}
-\subsubsection{Polya定理}
+\subsubsection{Polya}
 \begin{lstlisting}
 \end{lstlisting}
-推论：一共$n$个置换，第$i$个置换的循环节个数为$gcd(i,n)$
-$N*N$的正方形格子，$c^{n^2}+2c^{\frac{n^2+3}{4}}+c^{\frac{n^2+1}{2}}+2c^{n\frac{n+1}{2}}+2c^{\frac{n(n+1)}{2}}$
+推论：一共$n$个置换，第$i$个置换的循环节个数为$gcd(i,n)$\\
+$N*N$的正方形格子，$c^{n^2}+2c^{\frac{n^2+3}{4}}+c^{\frac{n^2+1}{2}}+2c^{n\frac{n+1}{2}}+2c^{\frac{n(n+1)}{2}}$\\
 正六面体，$\frac{m^8+17m^4+6m^2}{24}$
-正四面体，$\frac{m^4+11m^2}{12}$
+正四面体，$\frac{m^4+11m^2}{12}$\\
 \begin{lstlisting}
 // 长度为n的项链串用c种颜色染
 ll solve(int c, int n)
@@ -423,7 +442,7 @@ ll solve(int c, int n)
     return ans / n / 2;
 }
 \end{lstlisting}
-\subsection{快速乘-快速幂}
+\subsection{FastMul-FastPow}
 \begin{lstlisting}
 ll Mul(ll a, ll b, ll mod)
 {
@@ -440,11 +459,11 @@ ll Pow(ll a, ll n, ll mod)
     return t;
 }
 \end{lstlisting}
-\subsection{莫比乌斯反演}
-\subsubsection{莫比乌斯}
+\subsection{Mobius-Inversion}
+\subsubsection{Mobius}
 \begin{lstlisting}
 \end{lstlisting}
-$F(n)=\sum_{d|n}f(d)\Rightarrow f(n)=\sum_{d|n}\mu(d)F(\frac{n}{d})$
+$F(n)=\sum_{d|n}f(d)\Rightarrow f(n)=\sum_{d|n}\mu(d)F(\frac{n}{d})$\\
 $F(n)=\sum_{n|d}f(d)\Rightarrow f(n)=\sum_{n|d}\mu(\frac{d}{n})F(d)$
 \begin{lstlisting}
 ll ans;
@@ -473,7 +492,7 @@ void calmu()
     }
 }
 \end{lstlisting}
-\subsubsection{n个数中互质数对数}
+\subsubsection{Number of coprime}
 \begin{lstlisting}
 //  有n个数（n<=100000），问这n个数中互质的数的对数
 clr(b, 0);
@@ -513,19 +532,14 @@ int main()
     return 0;
 }
 \end{lstlisting}
-\subsection{其他}
-\subsubsection{Josephus问题}
+\subsection{Others}
+\subsubsection{Josephus}
 \begin{lstlisting}
-int num, m, r
-while (cin >> num >> m)
-{
-    r = 0;
-    for (int k = 1; k <= num; ++k)
-        r = (r + m) % k;
-    cout << r + 1 << endl;
-}
+int num, m, r = 0;
+for (int k = 1; k <= num; ++k) r = (r + m) % k;
+cout << r + 1 << endl;
 \end{lstlisting}
-\subsubsection{数位问题}
+\subsubsection{Digit}
 \begin{lstlisting}
 // n^n最左边一位数
 int leftmost(int n)
@@ -539,7 +553,8 @@ int leftmost(int n)
 // n!位数
 int count(ll n)
 {
-    return n == 1 ? 1 : (int)ceil(0.5 * log10(2 * M_PI * n) + n * log10(n) - n * log10(M_E));
+    if (n == 1) return 1;
+    return (int)ceil(0.5 * log10(2 * M_PI * n) + n * log10(n) - n * log10(M_E));
 }
 \end{lstlisting}
 \subsubsection{FFT}
@@ -549,23 +564,10 @@ const double PI = acos(-1.0);
 struct Complex
 {
     double x, y; //实部和虚部 x+yi
-    Complex(double _x = 0.0, double _y = 0.0)
-    {
-        x = _x;
-        y = _y;
-    }
-    Complex operator-(const Complex& b) const
-    {
-        return Complex(x - b.x, y - b.y);
-    }
-    Complex operator+(const Complex& b) const
-    {
-        return Complex(x + b.x, y + b.y);
-    }
-    Complex operator*(const Complex& b) const
-    {
-        return Complex(x * b.x - y * b.y, x * b.y + y * b.x);
-    }
+    Complex(double _x = 0.0, double _y = 0.0) { x = _x, y = _y; }
+    Complex operator-(const Complex& b) const { return Complex(x - b.x, y - b.y); }
+    Complex operator+(const Complex& b) const { return Complex(x + b.x, y + b.y); }
+    Complex operator*(const Complex& b) const { return Complex(x * b.x - y * b.y, x * b.y + y * b.x); }
 };
 /*
 * 进行FFT和IFFT前的反转变换。
@@ -576,18 +578,12 @@ void change(Complex y[], int len)
 {
     for (int i = 1, j = len / 2; i < len - 1; i++)
     {
-        if (i < j)
-            swap(y[i], y[j]);
+        if (i < j) swap(y[i], y[j]);
         //交换互为小标反转的元素，i<j保证交换一次
         //i做正常的+1，j左反转类型的+1,始终保持i和j是反转的
         int k = len / 2;
-        while (j >= k)
-        {
-            j -= k;
-            k /= 2;
-        }
-        if (j < k)
-            j += k;
+        while (j >= k) j -= k, k /= 2;
+        if (j < k) j += k;
     }
 }
 /*
@@ -608,18 +604,16 @@ void fft(Complex y[], int len, int on)
             {
                 Complex u = y[k];
                 Complex t = w * y[k + h / 2];
-                y[k] = u + t;
-                y[k + h / 2] = u - t;
+                y[k] = u + t, y[k + h / 2] = u - t;
                 w = w * wn;
             }
         }
     }
     if (on == -1)
-        for (int i = 0; i < len; i++)
-            y[i].x /= len;
+        for (int i = 0; i < len; i++) y[i].x /= len;
 }
 \end{lstlisting}
-\subsection{相关公式}
+\subsection{Formula}
 \begin{enumerate}
 \item 约数定理：若$n=\prod_{i=1}^kp_i^{a_i}$，则
 
@@ -737,7 +731,7 @@ a_{n+m}=\sum_{i=0}^{m-1}b_ia_{n+i}+c\Rightarrow
 \right)
 $$
 \end{enumerate}
-\clearpage\section{字符串}
+\clearpage\section{String-Processing}
 \subsection{KMP}
 \begin{lstlisting}
 // 返回y中x的个数
@@ -773,7 +767,7 @@ int kmp(char x[], int m, char y[], int n)
     return ans;
 }
 \end{lstlisting}
-\subsection{扩展KMP}
+\subsection{ExtendKMP}
 \begin{lstlisting}
 //next[i]:x[i...m-1]与x[0...m-1]的最长公共前缀
 //extend[i]:y[i...n-1]与x[0...m-1]的最长公共前缀
@@ -820,7 +814,7 @@ void EKMP(char x[], int m, char y[], int n)
     }
 }
 \end{lstlisting}
-\subsection{Manacher最长回文子串}
+\subsection{Manacher}
 \begin{lstlisting}
 // O(n)求解最长回文子串
 const int N = "Edit";
@@ -859,21 +853,15 @@ int solve(char s[])
     return res - 1;
 }
 \end{lstlisting}
-\subsection{AC自动机}
+\subsection{Aho-Corasick Automaton}
 \begin{lstlisting}
-\end{lstlisting}
-多模式匹配，返回主串中有多少模式串
-\begin{lstlisting}
-const int maxn = "Edit"
+//不要忘记build！
+const int maxn = "Edit";
 struct Trie
 {
     int ch[maxn][26], f[maxn], val[maxn];
     int sz, rt;
-    int newnode()
-    {
-        clr(ch[sz], -1), val[sz] = 0;
-        return sz++;
-    }
+    int newnode() { clr(ch[sz], -1), val[sz] = 0; return sz++; }
     void init() { sz = 0, rt = newnode(); }
     inline int idx(char c) { return c - 'A'; };
     void insert(const char* s)
@@ -902,18 +890,17 @@ struct Trie
         {
             int u = q.front();
             q.pop();
+            // val[u] |= val[f[u]];
             for (int c = 0; c < 26; c++)
             {
                 if (~ch[u][c])
-                {
-                    f[ch[u][c]] = ch[f[u]][c];
-                    q.push(ch[u][c]);
-                }
+                    f[ch[u][c]] = ch[f[u]][c], q.push(ch[u][c]);
                 else
                     ch[u][c] = ch[f[u]][c];
             }
         }
     }
+    //返回主串中有多少模式串
     int query(const char* s)
     {
         int u = rt, n = strlen(s);
@@ -926,7 +913,7 @@ struct Trie
             while (tmp != rt)
             {
                 res += val[tmp];
-                end[tmp] = 0;
+                val[tmp] = 0;
                 tmp = f[tmp];
             }
         }
@@ -934,13 +921,12 @@ struct Trie
     }
 };
 \end{lstlisting}
-\subsection{后缀数组}
+\subsection{Suffix Array}
 \begin{lstlisting}
 //倍增算法构造后缀数组,复杂度O(nlogn)
 const int maxn = "Edit";
 char s[maxn];
-int sa[maxn], t[maxn], t2[maxn], c[maxn];
-int rnk[maxn], height[maxn];
+int sa[maxn], t[maxn], t2[maxn], c[maxn], rnk[maxn], height[maxn];
 //n为字符串的长度,字符集的值为0~m-1
 void build_sa(int m, int n)
 {
@@ -1008,8 +994,8 @@ int lcp(int a, int b)
     return rmq(a, b);
 }
 \end{lstlisting}
-\clearpage\section{数据结构}
-\subsection{树状数组}
+\clearpage\section{Data-Structure}
+\subsection{Binary-Indexed-Tree}
 \begin{lstlisting}
 \end{lstlisting}
 $O(\log n)$查询和修改数组的前缀和
@@ -1030,38 +1016,30 @@ void add(int x, int v)
         bit[i] += v;
 }
 \end{lstlisting}
-\subsection{线段树}
-\subsubsection{声明}
+\subsection{Segment-Tree}
 \begin{lstlisting}
 #define lson rt << 1        // 左儿子
 #define rson rt << 1 | 1    // 右儿子
 #define Lson l, m, lson     // 左子树
 #define Rson m + 1, r, rson // 右子树
 void PushUp(int rt);        // 用lson和rson更新rt
-void PushDown(int rt[, int m]);
-// rt的标记下移，m为区间长度（若与标记有关）
-void build(int l, int r, int rt);
-// 以rt为根节点，对区间[l, r]建立线段树
-void update([...,] int l, int r, int rt)
-// rt[l, r]内寻找目标并更新
-int query(int L, int R, int l, int r, int rt)
-// rt-[l, r]内查询[L, R]
+void PushDown(int rt[, int m]);                 // rt的标记下移，m为区间长度（若与标记有关）
+void build(int l, int r, int rt);               // 以rt为根节点，对区间[l, r]建立线段树
+void update([...,] int l, int r, int rt)        // rt[l, r]内寻找目标并更新
+int query(int L, int R, int l, int r, int rt)   // rt-[l, r]内查询[L, R]
 \end{lstlisting}
-\subsubsection{单点更新-区间查询}
+\subsubsection{Single-point Update}
 \begin{lstlisting}
 const int maxn = "Edit";
 int sum[maxn << 2];
-void PushUp(int rt)
-{
-    sum[rt] = sum[lson] + sum[rson];
-}
+void PushUp(int rt) { sum[rt] = sum[lson] + sum[rson]; }
 void build(int l, int r, int rt)
 {
     if (l == r)
     {
         scanf("%d", &sum[rt]);
         return;
-    }    // 建立的时候直接输入叶节点
+    } // 建立的时候直接输入叶节点
     int m = (l + r) >> 1;
     build(Lson);
     build(Rson);
@@ -1088,16 +1066,13 @@ int query(int L, int R, int l, int r, int rt)
     return s;
 }
 \end{lstlisting}
-\subsubsection{区间更新-区间查询}
+\subsubsection{Interval Update}
 \begin{lstlisting}
 // seg[rt]用于存放懒惰标记，注意PushDown时标记的传递
 const int maxn = "Edit";
 int seg[maxn << 2], sum[maxn << 2];
 
-void PushUp(int rt)
-{
-    sum[rt] = sum[lson] + sum[rson];
-}
+void PushUp(int rt) { sum[rt] = sum[lson] + sum[rson]; }
 void PushDown(int rt, int m)
 {
     if (seg[rt] == 0) return;
@@ -1144,7 +1119,7 @@ int query(int L, int R, int l, int r, int rt)
     return ret;
 }
 \end{lstlisting}
-\subsection{划分树}
+\subsection{Partition-Tree}
 \begin{lstlisting}
 #define Lson l, m, dep + 1
 #define Rson m + 1, r, dep + 1
@@ -1152,7 +1127,6 @@ int query(int L, int R, int l, int r, int rt)
 int tree[20][maxn];   //表示每层每个位置的值
 int sorted[maxn];     //已经排序好的数
 int toleft[20][maxn]; //toleft[p][i]表示第i层从1到i有数分入左边
-
 void build(int l, int r, int dep)
 {
     if (l == r) return;
@@ -1198,7 +1172,7 @@ int query(int L, int R, int k, int l, int r, int dep)
     }
 }
 \end{lstlisting}
-\subsection{主席树}
+\subsection{Functional-Segment-Tree}
 \begin{lstlisting}
 // 静态查询区间第k小的值
 const int maxn = "Edit";
@@ -1213,21 +1187,16 @@ void update(int p, int l, int r, int& x, int y)
     lson[++cnt] = lson[y], rson[cnt] = rson[y], sum[cnt] = sum[y] + 1, x = cnt;
     if (l == r) return;
     int m = (l + r) >> 1;
-    if (p <= m)
-        update(p, Lson);
-    else
-        update(p, Rson);
+    if (p <= m) update(p, Lson);
+    else update(p, Rson);
 }
-
 int query(int l, int r, int x, int y, int k)
 {
     if (l == r) return l;
     int m = (l + r) >> 1;
     int s = sum[lson[y]] - sum[lson[x]];
-    if (s >= k)
-        return query(Lson, k);
-    else
-        return query(Rson, k - s);
+    if (s >= k) return query(Lson, k);
+    else return query(Rson, k - s);
 }
 \end{lstlisting}
 \subsection{RMQ}
@@ -1237,17 +1206,12 @@ int mmax[maxn][30], mmin[maxn][30];
 int a[maxn], n, k;
 void init()
 {
-    for (int i = 1; i <= n; i++)
-    {
-        mmax[i][0] = mmin[i][0] = a[i];
-    }
+    for (int i = 1; i <= n; i++) mmax[i][0] = mmin[i][0] = a[i];
     for (int j = 1; (1 << j) <= n; j++)
         for (int i = 1; i + (1 << j) - 1 <= n; i++)
         {
-            mmax[i][j] =
-                max(mmax[i][j - 1], mmax[i + (1 << (j - 1))][j - 1]);
-            mmin[i][j] =
-                min(mmin[i][j - 1], mmin[i + (1 << (j - 1))][j - 1]);
+            mmax[i][j] = max(mmax[i][j - 1], mmax[i + (1 << (j - 1))][j - 1]);
+            mmin[i][j] = min(mmin[i][j - 1], mmin[i + (1 << (j - 1))][j - 1]);
         }
 }
 // op=0/1 返回[l,r]最大/小值
@@ -1271,16 +1235,14 @@ void init()
                 for (int col = 1; col + (1 << j) - 1 <= m; col++)
                     //当x或y等于0的时候，就相当于一维的RMQ了
                     if (i == 0)
-                        dp[row][col][i][j] =
-                            max(dp[row][col][i][j - 1],
-                                dp[row][col + (1 << (j - 1))][i][j - 1]);
+                        dp[row][col][i][j] = max(dp[row][col][i][j - 1],
+                                                 dp[row][col + (1 << (j - 1))][i][j - 1]);
                     else if (j == 0)
-                        dp[row][col][i][j] =
-                            max(dp[row][col][i - 1][j],
-                                dp[row + (1 << (i - 1))][col][i - 1][j]);
-                    else dp[row][col][i][j] =
-                            max(dp[row][col][i][j - 1],
-                                dp[row][col + (1 << (j - 1))][i][j - 1]);
+                        dp[row][col][i][j] = max(dp[row][col][i - 1][j],
+                                                 dp[row + (1 << (i - 1))][col][i - 1][j]);
+                    else
+                        dp[row][col][i][j] = max(dp[row][col][i][j - 1],
+                                                 dp[row][col + (1 << (j - 1))][i][j - 1]);
         }
 }
 int rmq(int x1, int y1, int x2, int y2)
@@ -1295,18 +1257,14 @@ int rmq(int x1, int y1, int x2, int y2)
     return max(max(m1, m2), max(m3, m4));
 }
 \end{lstlisting}
-\clearpage\section{图论}
-\subsection{并查集}
+\clearpage\section{Graph-Theory}
+\subsection{Union-find-Set}
 \begin{lstlisting}
 const int maxn = "Edit";
 int n, fa[maxn], ra[maxn];
 void init()
 {
-    for (int i = 0; i <= n; i++)
-    {
-        fa[i] = i;
-        ra[i] = 0;
-    }
+    for (int i = 0; i <= n; i++) fa[i] = i, ra[i] = 0;
 }
 int find(int x)
 {
@@ -1314,8 +1272,7 @@ int find(int x)
 }
 void unite(int x, int y)
 {
-    x = find(x);
-    y = find(y);
+    x = find(x), y = find(y);
     if (x == y) return;
     if (ra[x] < ra[y])
         fa[x] = y;
@@ -1325,19 +1282,13 @@ void unite(int x, int y)
         if (ra[x] == ra[y]) ra[x]++;
     }
 }
-bool same(int x, int y)
-{
-    return find(x) == find(y);
-}
+bool same(int x, int y) { return find(x) == find(y); }
 \end{lstlisting}
-\subsection{最小生成树}
+\subsection{Minimal-Spanning-Tree}
 \subsubsection{Kruskal}
 \begin{lstlisting}
 vector<pair<int, PII> > G;
-void add_edge(int u, int v, int d)
-{
-    G.pb(mp(d, mp(u, v)));
-}
+void add_edge(int u, int v, int d) { G.pb(mp(d, mp(u, v))); }
 int Kruskal(int n)
 {
     init(n);
@@ -1395,47 +1346,8 @@ int Prim(int cost[][maxn], int n)
     return ans;
 }
 \end{lstlisting}
-\subsection{最短路}
-\subsubsection{Dijkstra-邻接矩阵}
-\begin{lstlisting}
-// N为点数最大值 求s到所有点的最短路
-// 要求边权值为非负数 模板为有向边
-// dis[x]为起点到点x的最短路 inf表示无法走到
-// 记得初始化
-const int N = "Edit"; // 点数最大值
-int G[N][N], dis[N];
-bool vis[N];
-void init(int n)
-{
-    clr(G, 0x3f);
-}
-void add_edge(int u, int v, int w)
-{
-    G[u][v] = min(G[u][v], w);
-}
-void Dijkstra(int s, int n)
-{
-    clr(vis, 0);
-    clr(dis, 0x3f);
-    dis[s] = 0;
-    for (int i = 0; i < n; i++)
-    {
-        int x, minDis = INF;
-        for (int j = 0; j < n; j++)
-        {
-            if (!vis[j] && dis[j] <= minDis)
-            {
-                x = j;
-                minDis = dis[j];
-            }
-        }
-        vis[x] = 1;
-        for (int j = 0; j < n; j++)
-            dis[j] = min(dis[j], dis[x] + G[x][j]);
-    }
-}
-\end{lstlisting}
-\subsubsection{Dijkstra-优先队列}
+\subsection{Shortest-Path}
+\subsubsection{Dijkstra}
 \begin{lstlisting}
 // pair<权值, 点>
 // 记得初始化
@@ -1480,68 +1392,20 @@ void Dijkstra(int s, int n)
     }
 }
 \end{lstlisting}
-\subsubsection{Bellman-Ford(可判负环)}
-\begin{lstlisting}
-// 求出起点s到每个点x的最短路dis[x]
-// 存在负环返回1 否则返回0
-// 记得初始化
-const int MAX_N = "Edit";   // 点数最大值
-const int MAX_E = "Edit";   // 边数最大值
-const int INF = 0x3f3f3f3f;
-int From[MAX_E], To[MAX_E], W[MAX_E];
-int dis[MAX_N], tot;
-void init()
-{
-    tot = 0;
-}
-void add_edge(int u, int v, int d)
-{
-    From[tot] = u;
-    To[tot] = v;
-    W[tot++] = d;
-}
-bool Bellman_Ford(int s, int n)
-{
-    clr(dis, 0x3f);
-    dis[s] = 0;
-    for (int k = 0; k < n - 1; k++)
-    {
-        bool relaxed = 0;
-        for (int i = 0; i < tot; i++)
-        {
-            int x = From[i], y = To[i];
-            if (dis[y] > dis[x] + W[i])
-            {
-                dis[y] = dis[x] + W[i];
-                relaxed = 1;
-            }
-        }
-        if (!relaxed) break;
-    }
-    for (int i = 0; i < tot; i++)
-        if (dis[To[i]] > dis[From[i]] + W[i])
-            return 1;
-    return 0;
-}
-\end{lstlisting}
 \subsubsection{SPFA}
 \begin{lstlisting}
 // G[u] = mp(v, w)
 // SPFA()返回0表示存在负环
 const int maxn = "Edit";
-vector<pair<int, int> > G[maxn];
+vector<PII> G[maxn];
 bool vis[maxn];
 int dis[maxn];
 int inqueue[maxn];
 void init(int n)
 {
-    for (int i = 0; i < n; i++)
-        G[i].clear();
+    for (int i = 0; i < n; i++) G[i].clear();
 }
-void add_edge(int u, int v, int w)
-{
-    G[u].pb(mp(v, w));
-}
+void add_edge(int u, int v, int w) { G[u].pb(mp(v, w)); }
 bool SPFA(int s, int n)
 {
     clr(vis, 0);
@@ -1557,8 +1421,7 @@ bool SPFA(int s, int n)
         vis[x] = false;
         for (int i = 0; i < G[x].size(); i++)
         {
-            int y = G[x][i].X;
-            int w = G[x][i].Y;
+            int y = G[x][i].X, w = G[x][i].Y;
             if (dis[y] > dis[x] + w)
             {
                 dis[y] = dis[x] + w;
@@ -1574,24 +1437,19 @@ bool SPFA(int s, int n)
     return 1;
 }
 \end{lstlisting}
-\subsubsection{Floyd算法}
+\subsubsection{Floyd}
 \begin{lstlisting}
 \end{lstlisting}
 $O(n^3)$求出任意两点间最短路
 \begin{lstlisting}
 const int maxn = "Edit";
-const int INF = 0x3f3f3f3f;
 int G[maxn][maxn];
 void init(int n)
 {
     clr(G, 0x3f);
-    for (int i = 0; i < n; i++)
-        G[i][i] = 0;
+    for (int i = 0; i < n; i++) G[i][i] = 0;
 }
-void add_edge(int u, int v, int w)
-{
-    G[u][v] = min(G[u][v], w);
-}
+void add_edge(int u, int v, int w) { G[u][v] = min(G[u][v], w); }
 void Floyd(int n)
 {
     for (int k = 0; k < n; k++)
@@ -1600,8 +1458,8 @@ void Floyd(int n)
                 G[i][j] = min(G[i][j], G[i][k] + G[k][j]);
 }
 \end{lstlisting}
-\subsection{拓扑排序}
-\subsubsection{邻接矩阵}
+\subsection{Topo-Sort}
+\subsubsection{Matrix}
 \begin{lstlisting}
 // 存图前记得初始化
 // Ans存放拓排结果，G为邻接矩阵，deg为入度信息
@@ -1610,38 +1468,32 @@ const int maxn = "Edit";
 int Ans[maxn];     // 存放拓扑排序结果
 int G[maxn][maxn]; // 存放图信息
 int deg[maxn];     // 存放点入度信息
-void init()
-{
-    clr(G, 0);
-    clr(deg, 0);
-    clr(Ans, 0);
-}
+void init() { clr(G, 0), clr(deg, 0), clr(Ans, 0); }
 void add_edge(int u, int v)
 {
     if (G[u][v]) return;
-    G[u][v] = 1;
-    deg[v]++;
+    G[u][v] = 1, deg[v]++;
 }
 bool Toposort(int n)
 {
     int tot = 0;
-    queue<int> que;
+    queue<int> q;
     for (int i = 0; i < n; ++i)
-        if (deg[i] == 0) que.push(i);
-    while (!que.empty())
+        if (deg[i] == 0) q.push(i);
+    while (!q.empty())
     {
-        int v = que.front();
-        que.pop();
+        int v = q.front();
+        q.pop();
         Ans[tot++] = v;
         for (int i = 0; i < n; ++i)
             if (G[v][i] == 1)
-                if (--deg[i] == 0) que.push(i);
+                if (--deg[i] == 0) q.push(i);
     }
     if (tot < n) return false;
     return true;
 }
 \end{lstlisting}
-\subsubsection{邻接表}
+\subsubsection{List}
 \begin{lstlisting}
 // 存图前记得初始化
 // Ans排序结果，G邻接表，deg入度，map用于判断重边
@@ -1656,8 +1508,7 @@ void init(int n)
 {
     S.clear();
     for (int i = 0; i < n; i++) G[i].clear();
-    clr(deg, 0);
-    clr(Ans, 0);
+    clr(deg, 0), clr(Ans, 0);
 }
 void add_edge(int u, int v)
 {
@@ -1669,18 +1520,18 @@ void add_edge(int u, int v)
 bool Toposort(int n)
 {
     int tot = 0;
-    queue<int> que;
+    queue<int> q;
     for (int i = 0; i < n; ++i)
-        if (deg[i] == 0) que.push(i);
-    while (!que.empty())
+        if (deg[i] == 0) q.push(i);
+    while (!q.empty())
     {
-        int v = que.front();
+        int v = q.front();
         que.pop();
         Ans[tot++] = v;
         for (int i = 0; i < G[v].size(); ++i)
         {
             int t = G[v][i];
-            if (--deg[t] == 0) que.push(t);
+            if (--deg[t] == 0) q.push(t);
         }
     }
     if (tot < n) return false;
@@ -1688,7 +1539,7 @@ bool Toposort(int n)
 }
 \end{lstlisting}
 \subsection{LCA}
-\subsubsection{Tarjan离线}
+\subsubsection{Tarjan}
 \begin{lstlisting}
 //Tarjan离线算法求LCA
 const int maxn = "Edit";
@@ -1697,7 +1548,7 @@ int ans[maxn];                      //存储答案
 vector<int> G[maxn];                //邻接表
 vector<int> query[maxn], num[maxn]; //存储查询信息
 bool vis[maxn];                     //是否被遍历
-void init(int n)
+inline void init(int n)
 {
     for (int i = 1; i <= n; i++)
     {
@@ -1708,16 +1559,11 @@ void init(int n)
         vis[i] = 0;
     }
 }
-void add_edge(int u, int v)
+inline void add_edge(int u, int v) { G[u].pb(v); }
+inline void add_query(int id, int u, int v)
 {
-    G[u].pb(v);
-}
-void add_query(int id, int u, int v)
-{
-    query[u].pb(v);
-    query[v].pb(u);
-    num[u].pb(id);
-    num[v].pb(id);
+    query[u].pb(v), query[v].pb(u);
+    num[u].pb(id), num[v].pb(id);
 }
 void tarjan(int u)
 {
@@ -1737,7 +1583,7 @@ void tarjan(int u)
     }
 }
 \end{lstlisting}
-\subsection{无向图的双连通分量}
+\subsection{Biconnected-Component}
 \begin{lstlisting}
 //割顶的bccno无意义
 const int maxn = "Edit";
@@ -1746,14 +1592,9 @@ vector<int> G[maxn], bcc[maxn];
 stack<PII> s;
 void init(int n)
 {
-    for (int i = 0; i < n; i++)
-        G[i].clear();
+    for (int i = 0; i < n; i++) G[i].clear();
 }
-void add_edge(int u, int v)
-{
-    G[u].pb(v);
-    G[v].pb(u);
-}
+inline void add_edge(int u, int v) { G[u].pb(v), G[v].pb(u); }
 int dfs(int u, int fa)
 {
     int lowu = pre[u] = ++dfs_clock;
@@ -1779,15 +1620,9 @@ int dfs(int u, int fa)
                     PII x = s.top();
                     s.pop();
                     if (bccno[x.X] != bcc_cnt)
-                    {
-                        bcc[bcc_cnt].pb(x.X);
-                        bcc[x.X] = bcc_cnt;
-                    }
+                        bcc[bcc_cnt].pb(x.X), bcc[x.X] = bcc_cnt;
                     if (bccno[x.Y] != bcc_cnt)
-                    {
-                        bcc[bcc_cnt].pb(x.Y);
-                        bcc[x.Y] = bcc_cnt;
-                    }
+                        bcc[bcc_cnt].pb(x.Y), bcc[x.Y] = bcc_cnt;
                     if (x.X == u && x.Y == v) break;
                 }
             }
@@ -1804,24 +1639,19 @@ int dfs(int u, int fa)
 void find_bcc(int n)
 {
     //调用结束后s保证为空，所以不用清空
-    clr(pre, 0);
-    clr(iscut, 0);
-    clr(bccno, 0);
+    clr(pre, 0), clr(iscut, 0), clr(bccno, 0);
     dfs_clock = bcc_cnt = 0;
     for (int i = 0; i < n; i++)
         if (!pre[i]) dfs(i, -1);
 }
 \end{lstlisting}
-\subsection{有向图的强联通分量}
+\subsection{Strongly-Connected-Component}
 \begin{lstlisting}
 const int maxn = "Edit";
 vector<int> G[maxn];
 int pre[maxn], lowlink[maxn], sccno[maxn], dfs_clock, scc_cnt;
 stack<int> S;
-void add_edge(int u, int v)
-{
-    G[u].pb(v);
-}
+inline void add_edge(int u, int v) { G[u].pb(v); }
 void dfs(int u)
 {
     pre[u] = lowlink[u] = ++dfs_clock;
@@ -1852,13 +1682,12 @@ void dfs(int u)
 void find_scc(int n)
 {
     dfs_clock = 0, scc_cnt = 0;
-    clr(sccno, 0);
-    clr(pre, 0);
+    clr(sccno, 0), clr(pre, 0);
     for (int i = 0; i < n; i++)
         if (!pre[i]) dfs(i);
 }
 \end{lstlisting}
-\subsection{二分图匹配}
+\subsection{Bipartite-Graph-Matching}
 1)一个二分图中的最大匹配数等于这个图中的最小点覆盖数
 
 König 定理是一个二分图中很重要的定理,它的意思是,一个二分图中的最大匹配数等于这个图中的最小点覆盖数。如果你还不知道什么是最小点覆盖,我也在这里说一下:假如选了一个点就相当于覆盖了以它为端点的所有边,你需要选择最少的点来覆盖所有的边。
@@ -1882,7 +1711,7 @@ König 定理是一个二分图中很重要的定理,它的意思是,一个二�
 3)二分图最大独立集=顶点数-二分图最大匹配
 
 独立集:图中任意两个顶点都不相连的顶点集合。
-\subsubsection{匈牙利算法(领接矩阵)}
+\subsubsection{Hungry(Matrix)}
 \begin{lstlisting}
 /*
 二分图匹配(匈牙利算法的DFS实现)(邻接矩阵形式)
@@ -1926,7 +1755,7 @@ int hungary()
     return res;
 }
 \end{lstlisting}
-\subsubsection{匈牙利算法(领接表)}
+\subsubsection{Hungry(List)}
 \begin{lstlisting}
 /*
 匈牙利算法邻接表形式
@@ -1938,15 +1767,11 @@ int n;
 vector<int> G[maxn];
 int linker[maxn];
 bool used[maxn];
-void init(int n)
+inline void init(int n)
 {
-    for (int i = 0; i < n; i++)
-        G[i].clear();
+    for (int i = 0; i < n; i++) G[i].clear();
 }
-void addedge(int u, int v)
-{
-    G[u].pb(v);
-}
+inline void addedge(int u, int v) { G[u].pb(v); }
 bool dfs(int u)
 {
     for (int i = 0; i < G[u].size(); i++)
@@ -1976,7 +1801,7 @@ int hungary()
     return ans;
 }
 \end{lstlisting}
-\subsubsection{Hopcroft-Carp算法}
+\subsubsection{Hopcroft-Carp}
 \begin{lstlisting}
 /*
 二分图匹配(Hopcroft-Carp算法)
@@ -1992,6 +1817,11 @@ int Mx[maxn], My[maxn];
 int dx[maxn], dy[maxn];
 int dis;
 bool used[maxn];
+inline void init(int n)
+{
+    for (int i = 0; i < n; i++) G[i].clear();
+}
+inline void addedge(int u, int v) { G[u].pb(v); }
 bool SearchP()
 {
     queue<int> Q;
@@ -2040,8 +1870,7 @@ bool DFS(int u)
             if (My[v] != -1 && dy[v] == dis) continue;
             if (My[v] == -1 || DFS(My[v]))
             {
-                My[v] = u;
-                Mx[u] = v;
+                My[v] = u, Mx[u] = v;
                 return true;
             }
         }
@@ -2051,14 +1880,12 @@ bool DFS(int u)
 int MaxMatch()
 {
     int res = 0;
-    clr(Mx, -1);
-    clr(My, -1);
+    clr(Mx, -1), clr(My, -1);
     while (SearchP())
     {
         clr(used, false);
         for (int i = 0; i < uN; i++)
-            if (Mx[i] == -1 && DFS(i))
-                res++;
+            if (Mx[i] == -1 && DFS(i)) res++;
     }
     return res;
 }
@@ -2111,8 +1938,7 @@ struct TwoSAT
     }
 };
 \end{lstlisting}
-\clearpage\section{网络流}
-\subsection{最大流}
+\subsection{Network-Flow}
 \subsubsection{EdmondKarp}
 \begin{lstlisting}
 const int maxn = "Edit";
@@ -2390,7 +2216,7 @@ struct ISAP
     }
 };
 \end{lstlisting}
-\subsection{最小费用最大流}
+\subsubsection{MinCost MaxFlow}
 \begin{lstlisting}
 const int maxn = "Edit";
 struct Edge
@@ -2471,8 +2297,8 @@ struct MCMF
     }
 };
 \end{lstlisting}
-\clearpage\section{计算几何}
-\subsection{基本函数}
+\clearpage\section{Computational-Geometry}
+\subsection{Basic-Function}
 \begin{lstlisting}
 #define zero(x) ((fabs(x) < eps ? 1 : 0))
 #define sgn(x) (fabs(x) < eps ? 0 : ((x) < 0 ? -1 : 1))
@@ -2480,34 +2306,15 @@ struct MCMF
 struct point
 {
     double x, y;
-    point(double a = 0, double b = 0)
-    {
-        x = a;
-        y = b;
-    }
-    point operator-(const point& b) const
-    {
-        return point(x - b.x, y - b.y);
-    }
-    point operator+(const point& b) const
-    {
-        return point(x + b.x, y + b.y);
-    }
+    point(double a = 0, double b = 0) { x = a, y = b; }
+    point operator-(const point& b) const { return point(x - b.x, y - b.y); }
+    point operator+(const point& b) const { return point(x + b.x, y + b.y); }
     // 两点是否重合
-    bool operator==(point& b)
-    {
-        return zero(x - b.x) && zero(y - b.y);
-    }
+    bool operator==(point& b) { return zero(x - b.x) && zero(y - b.y); }
     // 点积(以原点为基准)
-    double operator*(const point& b) const
-    {
-        return x * b.x + y * b.y;
-    }
+    double operator*(const point& b) const { return x * b.x + y * b.y; }
     // 叉积(以原点为基准)
-    double operator^(const point& b) const
-    {
-        return x * b.y - y * b.x;
-    }
+    double operator^(const point& b) const { return x * b.y - y * b.x; }
     // 绕P点逆时针旋转a弧度后的点
     point rotate(point b, double a)
     {
@@ -2518,32 +2325,21 @@ struct point
         return point(tx, ty) + b;
     }
     // 点坐标分别赋值到a和b
-    void split(double& a, double& b)
-    {
-        a = x;
-        b = y;
-    }
+    void split(double& a, double& b) { a = x, b = y; }
 };
 struct line
 {
     point s, e;
     line() {}
-    line(point ss, point ee)
-    {
-        s = ss;
-        e = ee;
-    }
+    line(point ss, point ee) { s = ss, e = ee; }
 };
 \end{lstlisting}
-\subsection{位置关系}
-\subsubsection{两点间距离}
+\subsection{Position}
+\subsubsection{Point-Point}
 \begin{lstlisting}
-double dist(point a, point b)
-{
-    return sqrt((a - b) * (a - b));
-}
+double dist(point a, point b) { return sqrt((a - b) * (a - b)); }
 \end{lstlisting}
-\subsubsection{直线与直线的交点}
+\subsubsection{Line-Line}
 \begin{lstlisting}
 // <0, *> 表示重合; <1, *> 表示平行; <2, P> 表示交点是P;
 pair<int, point> spoint(line l1, line l2)
@@ -2557,7 +2353,7 @@ pair<int, point> spoint(line l1, line l2)
     return mp(2, res);
 }
 \end{lstlisting}
-\subsubsection{判断线段与线段相交}
+\subsubsection{Segment-Segment}
 \begin{lstlisting}
 bool segxseg(line l1, line l2)
 {
@@ -2570,7 +2366,7 @@ bool segxseg(line l1, line l2)
         sgn((l1.s - l2.e) ^ (l2.s - l2.e)) * sgn((l1.e-l2.e) ^ (l2.s - l2.e)) <= 0;
 }
 \end{lstlisting}
-\subsubsection{判断线段与直线相交}
+\subsubsection{Line-Segment}
 \begin{lstlisting}
 //l1是直线,l2是线段
 bool segxline(line l1, line l2)
@@ -2578,7 +2374,7 @@ bool segxline(line l1, line l2)
     return sgn((l2.s - l1.e) ^ (l1.s - l1.e)) * sgn((l2.e - l1.e) ^ (l1.s - l1.e)) <= 0;
 }
 \end{lstlisting}
-\subsubsection{点到直线距离}
+\subsubsection{Point-Line}
 \begin{lstlisting}
 point pointtoline(point P, line L)
 {
@@ -2589,7 +2385,7 @@ point pointtoline(point P, line L)
     return dist(P, res);
 }
 \end{lstlisting}
-\subsubsection{点到线段距离}
+\subsubsection{Point-Segment}
 \begin{lstlisting}
 point pointtosegment(point p, line l)
 {
@@ -2605,7 +2401,7 @@ point pointtosegment(point p, line l)
     return res;
 }
 \end{lstlisting}
-\subsubsection{点在线段上}
+\subsubsection{Point on Segment}
 \begin{lstlisting}
 bool PointOnSeg(point p, line l)
 {
@@ -2615,8 +2411,8 @@ bool PointOnSeg(point p, line l)
         sgn((p.y - l.s.y) * (p.y - l.e.y)) <= 0;
 }
 \end{lstlisting}
-\subsection{多边形}
-\subsubsection{多边形面积}
+\subsection{Polygon}
+\subsubsection{Area}
 \begin{lstlisting}
 double area(point p[], int n)
 {
@@ -2626,7 +2422,7 @@ double area(point p[], int n)
     return fabs(res);
 }
 \end{lstlisting}
-\subsubsection{点在凸多边形内}
+\subsubsection{Point in Convex}
 \begin{lstlisting}
 // 点形成一个凸包, 而且按逆时针排序(如果是顺时针把里面的<0改为>0)
 // 点的编号 : [0,n)
@@ -2636,16 +2432,14 @@ double area(point p[], int n)
 int PointInConvex(point a, point p[], int n)
 {
     for (int i = 0; i < n; i++)
-    {
         if (sgn((p[i] - a) ^ (p[(i + 1) % n] - a)) < 0)
             return -1;
         else if (PointOnSeg(a, line(p[i], p[(i + 1) % n])))
             return 0;
-    }
     return 1;
 }
 \end{lstlisting}
-\subsubsection{点在任意多边形内}
+\subsubsection{Point in Polygon}
 \begin{lstlisting}
 // 射线法,poly[]的顶点数要大于等于3,点的编号0~n-1
 // -1 : 点在凸多边形外
@@ -2668,27 +2462,23 @@ int PointInPoly(point p, point poly[], int n)
         if (sgn(side.s.y - side.e.y) == 0)
             continue;
         if (PointOnSeg(sid e.s, r ay))
-        {
-            if (sgn(side.s.y - side.e.y) > 0) cnt++;
-        }
+            cnt += (sgn(side.s.y - side.e.y) > 0);
         else if (PointOnSeg(side.e, ray))
-        {
-            if (sgn(side.e.y - side.s.y) > 0) cnt++;
-        }
+            cnt += (sgn(side.e.y - side.s.y) > 0);
         else if (segxseg(ray, side))
             cnt++;
     }
     return cnt % 2 == 1 ? 1 : -1;
 }
 \end{lstlisting}
-\subsubsection{判断凸多边形}
+\subsubsection{Judge Convex}
 \begin{lstlisting}
 //点可以是顺时针给出也可以是逆时针给出
 //点的编号1~n-1
 bool isconvex(point poly[], int n)
 {
     bool s[3];
-    set(s, 0);
+    clr(s, 0);
     for (int i = 0; i < n; i++)
     {
         s[sgn((poly[(i + 1) % n] - poly[i]) ^ (poly[(i + 2) % n] - poly[i])) + 1] = 1;
@@ -2697,15 +2487,12 @@ bool isconvex(point poly[], int n)
     return 1;
 }
 \end{lstlisting}
-\subsection{整数点问题}
-\subsubsection{线段上整点个数}
+\subsection{Integer-Points}
+\subsubsection{On Segment}
 \begin{lstlisting}
-int OnSegment(line l)
-{
-    return __gcd(fabs(l.s.x - l.e.x), fabs(l.s.y - l.e.y)) + 1;
-}
+int OnSegment(line l) { return __gcd(fabs(l.s.x - l.e.x), fabs(l.s.y - l.e.y)) + 1; }
 \end{lstlisting}
-\subsubsection{多边形边上整点个数}
+\subsubsection{On Polygon Edge}
 \begin{lstlisting}
 int OnEdge(point p[], int n)
 {
@@ -2715,7 +2502,7 @@ int OnEdge(point p[], int n)
     return ret;
 }
 \end{lstlisting}
-\subsubsection{多边形内整点个数}
+\subsubsection{Inside Polygon}
 \begin{lstlisting}
 int InSide(point p[], int n)
 {
@@ -2725,8 +2512,8 @@ int InSide(point p[], int n)
     return (fabs(area) - OnEdge(n, p)) / 2 + 1;
 }
 \end{lstlisting}
-\subsection{圆}
-\subsubsection{过三点求圆心}
+\subsection{Circle}
+\subsubsection{Circumcenter}
 \begin{lstlisting}
 point waixin(point a, point b, point c)
 {
@@ -2736,25 +2523,24 @@ point waixin(point a, point b, point c)
     return point(a.x + (c1 * b2 - c2 * b1) / d, a.y + (a1 * c2 - a2 * c1) / d);
 }
 \end{lstlisting}
-\clearpage\section{动态规划}
-\subsection{子序列}
-\subsubsection{最大子序列和}
+\clearpage\section{Dynamic-Programming}
+\subsection{Subsequence}
+\subsubsection{Max Sum}
 \begin{lstlisting}
 // 传入序列a和长度n，返回最大子序列和
-// 限制最短长度：用cnt记录长度，rt更新时判断
 int MaxSeqSum(int a[], int n)
 {
     int rt = 0, cur = 0;
     for (int i = 0; i < n; i++)
     {
         cur += a[i];
-        rt = rt < cur ? cur : rt;
-        cur = cur < 0 ? 0 : cur;
+        rt = max(cur, rt);
+        cur = max(0, cur);
     }
     return rt;
 }
 \end{lstlisting}
-\subsubsection{最长上升子序列LIS}
+\subsubsection{Longest Increase}
 \begin{lstlisting}
 // 序列下标从1开始，LIS()返回长度，序列存在lis[]中
 #define N 100100
@@ -2786,7 +2572,7 @@ int LIS(int lis[])
     return len;
 }
 \end{lstlisting}
-\subsubsection{最长公共上升子序列LCIS}
+\subsubsection{Longest Common Increase}
 \begin{lstlisting}
 // 序列下标从1开始
 int LCIS(int a[], int b[], int n, int m)
@@ -2805,9 +2591,9 @@ int LCIS(int a[], int b[], int n, int m)
     return *max_element(dp[n] + 1, dp[n] + 1 + m);
 }
 \end{lstlisting}
-\clearpage\section{其他}
-\subsection{矩阵}
-\subsubsection{矩阵快速幂}
+\clearpage\section{Others}
+\subsection{Matrix}
+\subsubsection{Matrix FastPow}
 \begin{lstlisting}
 typedef vector<ll> vec;
 typedef vector<vec> mat;
@@ -2824,33 +2610,32 @@ mat mul(mat& A, mat& B)
 mat Pow(mat A, ll n)
 {
     mat B(A.size(), vec(A.size()));
-    for (int i = 0; i < A.size(); i++)
-        B[i][i] = 1;
+    for (int i = 0; i < A.size(); i++) B[i][i] = 1;
     for (; n; n >>= 1, A = mul(A, A))
         if (n & 1) B = mul(B, A);
     return B;
 }
 \end{lstlisting}
-\subsubsection{高斯消元}
+\subsubsection{Gauss Elimination}
 \begin{lstlisting}
 void gauss()
 {
     int now = 1, to;
     double t;
-    for (int i = 1; i <= n; i++) {
+    for (int i = 1; i <= n; i++)
+    {
         /*for (to = now; !a[to][i] && to <= n; to++);
         //做除法时减小误差，可不写
         if (to != now)
             for (int j = 1; j <= n + 1; j++)
                 swap(a[to][j], a[now][j]);*/
         t = a[now][i];
-        for (int j = 1; j <= n + 1; j++)
-            a[now][j] /= t;
+        for (int j = 1; j <= n + 1; j++) a[now][j] /= t;
         for (int j = 1; j <= n; j++)
-            if (j != now) {
+            if (j != now)
+            {
                 t = a[j][i];
-                for (int k = 1; k <= n + 1; k++)
-                    a[j][k] -= t * a[now][k];
+                for (int k = 1; k <= n + 1; k++) a[j][k] -= t * a[now][k];
             }
         now++;
     }
@@ -2861,7 +2646,7 @@ void gauss()
 \begin{lstlisting}
 for (int i = 1; i <= m; i++)
     for (int j = 63; ~j; j--)
-        if ((a[i] >> j) & 1) {
+        if ((a[i] >> j) & 1)
             if (!ins[j])
             {
                 ins[j] = a[i];
@@ -2869,10 +2654,9 @@ for (int i = 1; i <= m; i++)
             }
             else
                 a[i] ^= ins[j];
-        }
 \end{lstlisting}
-\subsection{高精度}
-\subsubsection{高精度}
+\subsection{BigNum}
+\subsubsection{High-precision}
 \begin{lstlisting}
 // 加法 乘法 小于号 输出
 struct bint
@@ -2883,10 +2667,8 @@ struct bint
     {
         l = x == 0;
         clr(w, 0);
-        while (x != 0) {
-            w[l++] = x % 10;
-            x /= 10;
-        }
+        while (x != 0)
+            w[l++] = x % 10, x /= 10;
     }
     bool operator<(const bint& x) const
     {
@@ -2935,7 +2717,7 @@ struct bint
     }
 };
 \end{lstlisting}
-\subsubsection{完全高精度}
+\subsubsection{Complete High-precision}
 \begin{lstlisting}
 #define N 10000
 class bint
@@ -2945,22 +2727,15 @@ private:
     int len;  // 数字长度
 public:
     // 构造函数
-    bint()
-    {
-        len = 1;
-        clr(a, 0);
-    }
+    bint() { len = 1, clr(a, 0); }
     // int -> bint
     bint(int n)
     {
         len = 0;
         clr(a, 0);
         int d = n;
-        while (n) {
-            d = n / 10 * 10;
-            a[len++] = n - d;
-            n = d / 10;
-        }
+        while (n)
+            d = n / 10 * 10, a[len++] = n - d, n = d / 10;
     }
     // char[] -> int
     bint(const char s[])
@@ -2968,23 +2743,20 @@ public:
         clr(a, 0);
         len = 0;
         int l = strlen(s);
-        for (int i = l - 1; i >= 0; i--)
-            a[len++] = s[i];
+        for (int i = l - 1; ~i; i--) a[len++] = s[i];
     }
     // 拷贝构造函数
     bint(const bint& b)
     {
-        cclr(a, 0);
+        clr(a, 0);
         len = b.len;
-        for (int i = 0; i < len; i++)
-            a[i] = b.a[i];
+        for (int i = 0; i < len; i++) a[i] = b.a[i];
     }
     // 重载运算符 bint = bint
     bint& operator=(const bint& n)
     {
         len = n.len;
-        for (int i = 0; i < len; i++)
-            a[i] = n.a[i];
+        for (int i = 0; i < len; i++) a[i] = n.a[i];
         return *this;
     }
     // 重载运算符 bint + bint
@@ -2992,12 +2764,10 @@ public:
     {
         bint t(*this);
         int res = b.len > len ? b.len : len;
-        for (int i = 0; i < res; i++) {
+        for (int i = 0; i < res; i++)
+        {
             t.a[i] += b.a[i];
-            if (t.a[i] >= 10) {
-                t.a[i + 1]++;
-                t.a[i] -= 10;
-            }
+            if (t.a[i] >= 10) t.a[i + 1]++, t.a[i] -= 10;
         }
         t.len = res + a[res] == 0;
         return t;
@@ -3015,15 +2785,13 @@ public:
                 j = i + 1;
                 while (t1.a[j] == 0) j++;
                 t1.a[j--]--;
-                while (j > i)
-                    t1.a[j--] += 9;
+                while (j > i) t1.a[j--] += 9;
                 t1.a[i] += 10 - t1.a[i];
             }
             else
                 t1.a[i] -= t2.a[i];
         t1.len = res;
-        while (t1.a[len - 1] == 0 && t1.len > 1)
-            t1.len--, res--;
+        while (t1.a[len - 1] == 0 && t1.len > 1) t1.len--, res--;
         if (f) t1.a[res - 1] = 0 - t1.a[res - 1];
         return t1;
     }
@@ -3039,16 +2807,9 @@ public:
             {
                 tmp = a[i] * b.a[j] + t.a[i + j] + up;
                 if (tmp > 9)
-                {
-                    tmp1 = tmp - tmp / 10 * 10;
-                    up = tmp / 10;
-                    t.a[i + j] = tmp1;
-                }
+                    tmp1 = tmp - tmp / 10 * 10, up = tmp / 10, t.a[i + j] = tmp1;
                 else
-                {
-                    up = 0;
-                    t.a[i + j] = tmp;
-                }
+                    up = 0, t.a[i + j] = tmp;
             }
             if (up) t.a[i + j] = up;
         }
@@ -3061,11 +2822,8 @@ public:
     {
         bint t;
         int down = 0;
-        for (int i = len - 1; i >= 0; i--)
-        {
-            t.a[i] = (a[i] + down * 10) / b;
-            down = a[i] + down * 10 - t.a[i] * b;
-        }
+        for (int i = len - 1; ~i; i--)
+            t.a[i] = (a[i] + down * 10) / b, down = a[i] + down * 10 - t.a[i] * b;
         t.len = len;
         while (t.a[t.len - 1] == 0 && t.len > 1) t.len--;
         return t;
@@ -3077,14 +2835,10 @@ public:
         if (n == 0) return 1;
         if (n == 1) return *this;
         int m = n;
-        while (m)
-        {
+        for (; m; m >>= 1, t = t * t)
             if (m & 1) rt = rt * t;
-            t = t * t;
-            m >>= 1;
-        }
-        return rt;
     }
+    return rt;
     // 重载运算符 bint > bint 比较大小
     bool operator>(const bint& b) const
     {
@@ -3099,31 +2853,23 @@ public:
         return 0;
     }
     // 重载运算符 bint > int 比较大小
-    bool operator>(const int& n) const
-    {
-        return *this > bint(n);
-    }
+    bool operator>(const int& n) const { return *this > bint(n); }
     // 输出
     void out()
     {
         printf("%d", a[len - 1]);
-        for (int i = len - 2; i >= 0; i--)
-            printf("%d", a[i]);
+        for (int i = len - 2; ~i; i--) printf("%d", a[i]);
         puts("");
     }
 };
 \end{lstlisting}
-\subsection{莫队算法}
+\subsection{Mo}
 \begin{lstlisting}
 \end{lstlisting}
 莫队算法,可以解决一类静态,离线区间查询问题。分成 $\sqrt{x}$ 块,分块排序。
 \begin{lstlisting}
-struct query
-{
-    int L, R, id;
-} node[maxn];
-
-void solve()
+struct query { int L, R, id; };
+void solve(query node[], int m)
 {
     tmp = 0;
     clr(num, 0);
@@ -3140,7 +2886,7 @@ void solve()
     }
 }
 \end{lstlisting}
-\subsection{输入输出外挂}
+\subsection{Fast-Scanner}
 \begin{lstlisting}
 // 适用于正负整数
 template <class T>
