@@ -12,9 +12,7 @@ void init(int n)
 void add_edge(int u, int v, int w) { G[u].pb(mp(v, w)); }
 bool SPFA(int s, int n)
 {
-    clr(vis, 0);
-    clr(dis, 0x3f);
-    clr(inqueue, 0);
+    clr(vis, 0), clr(dis, 0x3f), clr(inqueue, 0);
     dis[s] = 0;
     queue<int> q; // 待优化的节点入队
     q.push(s);

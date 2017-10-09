@@ -5,8 +5,7 @@ int leftmost(int n)
 {
     double m = n * log10((double)n);
     double g = m - (ll)m;
-    g = pow(10.0, g);
-    return (int)g;
+    return (int)pow(10.0, g);
 }
 // ---
 // $n!$位数

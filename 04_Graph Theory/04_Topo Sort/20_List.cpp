@@ -2,7 +2,6 @@
 // Ans排序结果，G邻接表，deg入度，map用于判断重边
 // 排序成功返回1，存在环返回0
 const int maxn = "Edit";
-typedef pair<int, int> PII;
 int Ans[maxn];
 vector<int> G[maxn];
 int deg[maxn];

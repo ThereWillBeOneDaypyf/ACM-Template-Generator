@@ -5,10 +5,8 @@ struct bint
     short int w[100];
     bint(int x = 0)
     {
-        l = x == 0;
-        clr(w, 0);
-        while (x != 0)
-            w[l++] = x % 10, x /= 10;
+        l = x == 0, clr(w, 0);
+        while (x) w[l++] = x % 10, x /= 10;
     }
     bool operator<(const bint& x) const
     {
@@ -51,8 +49,7 @@ struct bint
     }
     void print()
     {
-        for (int i = l - 1; i >= 0; i--)
-            printf("%d", w[i]);
-        printf("\n");
+        for (int i = l - 1; ~i; i--) printf("%d", w[i]);
+        puts("");
     }
 };

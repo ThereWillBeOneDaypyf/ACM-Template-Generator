@@ -2,7 +2,7 @@ void gauss()
 {
     int now = 1, to;
     double t;
-    for (int i = 1; i <= n; i++)
+    for (int i = 1; i <= n; i++, now++)
     {
         /*for (to = now; !a[to][i] && to <= n; to++);
         //做除法时减小误差，可不写
@@ -17,6 +17,5 @@ void gauss()
                 t = a[j][i];
                 for (int k = 1; k <= n + 1; k++) a[j][k] -= t * a[now][k];
             }
-        now++;
     }
 }

@@ -7,14 +7,12 @@ VII G[maxn];
 int vis[maxn], dis[maxn];
 void init(int n)
 {
-    for (int i = 0; i < n; i++)
-        G[i].clear();
+    for (int i = 0; i < n; i++) G[i].clear();
 }
 void add_edge(int u, int v, int w) { G[u].pb(mp(w, v)); }
 void Dijkstra(int s, int n)
 {
-    clr(vis, 0);
-    clr(dis, 0x3f);
+    clr(vis, 0), clr(dis, 0x3f);
     dis[s] = 0;
     priority_queue<PII, VII, greater<PII> > q;
     q.push(mp(dis[s], s));
@@ -27,8 +25,7 @@ void Dijkstra(int s, int n)
         vis[x] = 1;
         for (int i = 0; i < G[x].size(); i++)
         {
-            int y = G[x][i].Y;
-            int w = G[x][i].X;
+            int y = G[x][i].Y, w = G[x][i].X;
             if (!vis[y] && dis[y] > dis[x] + w)
             {
                 dis[y] = dis[x] + w;

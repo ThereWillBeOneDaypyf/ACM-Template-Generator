@@ -136,8 +136,7 @@ public:
     // 输出
     void out()
     {
-        printf("%d", a[len - 1]);
-        for (int i = len - 2; ~i; i--) printf("%d", a[i]);
+        for (int i = len - 1; ~i; i--) printf("%d", a[i]);
         puts("");
     }
 };

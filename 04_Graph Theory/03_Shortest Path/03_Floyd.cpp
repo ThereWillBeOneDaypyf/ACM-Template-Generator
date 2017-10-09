@@ -1,6 +1,7 @@
 // ---
 // $O(n^3)$求出任意两点间最短路
 // ---
+// 领接矩阵存图需注意判断重边
 const int maxn = "Edit";
 int G[maxn][maxn];
 void init(int n)

@@ -1,9 +1,4 @@
 const int maxn = "Edit";
-struct Edge
-{
-    int from, to, cap, flow;
-    Edge(int u, int v, int c, int f) : from(u), to(v), cap(c), flow(f) {}
-};
 struct ISAP
 {
     int n, m, s, t;      //结点数，边数（包括反向弧），源点编号和汇点编号
@@ -20,7 +15,7 @@ struct ISAP
         for (int i = 0; i < n; i++) G[i].clear();
         edges.clear();
     }
-    void addEdge(int from, int to, int cap)
+    void AddEdge(int from, int to, int cap)
     {
         edges.pb(Edge(from, to, cap, 0));
         edges.pb(Edge(to, from, 0, 0));
@@ -108,8 +103,7 @@ struct ISAP
                 for (int i = 0; i < G[x].size(); i++)
                 {
                     Edge& e = edges[G[x][i]];
-                    if (e.cap > e.flow)
-                        m = min(m, d[e.to]);
+                    if (e.cap > e.flow) m = min(m, d[e.to]);
                 }
                 if (--num[d[x]] == 0) break; //gap优化
                 num[d[x] = m + 1]++;

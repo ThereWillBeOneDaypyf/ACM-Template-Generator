@@ -1,9 +1,4 @@
 const int maxn = "Edit";
-struct Edge
-{
-    int from, to, cap, flow;
-    Edge(int u, int v, int c, int f) : from(u), to(v), cap(c), flow(f) {}
-};
 struct EdmonsKarp //时间复杂度O(v*E*E)
 {
     int n, m;

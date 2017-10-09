@@ -1,9 +1,4 @@
 const int maxn = "Edit";
-struct Edge
-{
-    int from, to, cap, flow;
-    Edge(int u, int v, int c, int f) : from(u), to(v), cap(c), flow(f) {}
-};
 struct Dinic
 {
     int n, m, s, t;      //结点数，边数（包括反向弧），源点编号和汇点编号
