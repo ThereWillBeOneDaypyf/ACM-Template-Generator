@@ -4,8 +4,10 @@ import sys
 import json
 
 TexHead = r"""
-\documentclass[a4]{article}
+\documentclass[twoside]{article}
+\usepackage[colorlinks,linkcolor=black]{hyperref}
 \usepackage{xeCJK}
+\usepackage{fancyhdr}
 \usepackage{amsmath, amsthm}
 \usepackage{listings,xcolor}
 \usepackage{geometry}
@@ -18,7 +20,9 @@ TexHead = r"""
     breaklines  = true,
     captionpos  = b,
     tabsize     = 4,
+    numbers     = left,
     columns     = fullflexible,
+    keepspaces  = true,
     commentstyle = \color[RGB]{0,128,0},
     keywordstyle = \color[RGB]{0,0,255},
     basicstyle   = \small\ttfamily,
@@ -96,7 +100,7 @@ def ReadTex(file):
 
 
 def Search(level, pwd, folder=''):
-    ls = os.popen('ls %s| grep [0-9]_' % pwd).read().split('\n')[:-1]
+    ls = os.popen('ls "%s"| grep [0-9]_' % pwd).read().split('\n')[:-1]
     if folder:
         TargetFile.write(SECTION[level] % folder[3:])
     for item in ls:
@@ -110,7 +114,7 @@ def Search(level, pwd, folder=''):
                 TargetFile.write(SECTION[level + 1] % item[3:-4])
             ReadTex(pwd + item)
         else:
-            cd = os.popen('cd %s%s/' % (pwd, item)).read()
+            cd = os.popen('cd "%s%s/"' % (pwd, item)).read()
             if 'Not a directory' in cd or 'No such file or directory' in cd:
                 print '[Unknown File] %s/%s' % (pwd, item)
             else:
@@ -132,9 +136,11 @@ if __name__ == '__main__':
     TargetFile.write(TexHead)
     TargetFile.write('\\title{%s}\n' % TITLE)
     TargetFile.write('\\author{%s}\n' % AUTHOR)
-    TargetFile.write('\\begin{document}\\large\n')
-    TargetFile.write('\\begin{titlepage}\n\\maketitle\\setcounter{page}{0}\\thispagestyle{empty}\\clearpage\n\\clearpage\n\\tableofcontents\\clearpage\n\end{titlepage}\n')
-    TargetFile.write('\\setcounter{section}{-1}\n')
+    TargetFile.write('\\pagestyle{fancy}\n\\fancyhf{}\n\\fancyhead[C]{%s by %s}' % (TITLE, AUTHOR))
+    TargetFile.write('\\begin{document}\\small\n')
+    TargetFile.write('\\begin{titlepage}\n\\maketitle\\setcounter{page}{0}\\thispagestyle{empty}\\clearpage\n\\tableofcontents\\clearpage\n\end{titlepage}\n')
+    TargetFile.write('\\pagestyle{fancy}\n\\lfoot{}\n\\cfoot{\\thepage}\\rfoot{}\n')
+    TargetFile.write('\\setcounter{section}{-1}\n\\setcounter{page}{1}\n')
 
     # Search Files
     Search(0, './')

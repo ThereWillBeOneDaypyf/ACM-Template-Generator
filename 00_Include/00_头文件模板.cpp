@@ -15,19 +15,3 @@ typedef vector<int> VI;
 const int INF = 0x3f3f3f3f;
 const int mod = 1e9 + 7;
 const double eps = 1e-6;
-// ---
-// vim配置
-// ---
-syntax on
-set cindent
-set nu
-set tabstop = 4
-set shiftwidth = 4
-set background = dark
-map<C-A> ggVG"+y
-map<F5>: call Run()<CR>
-func !Run()
-    exec "w"
-    exec "!g++ -Wall % -o %<"
-    exec "!./%<"
-endfunc

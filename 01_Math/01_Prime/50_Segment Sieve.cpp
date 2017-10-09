@@ -4,6 +4,9 @@
 // is\_prime[i-a]=true表示i是素数\\
 // $a<b \le 10^{12}, b-a \le 10^6$
 // ---
+const int maxn = "Edit";
+bool is_prime_small[maxn], is_prime[maxn];
+int prime[maxn];
 int segment_sieve(ll a, ll b)
 {
     int tot = 0;

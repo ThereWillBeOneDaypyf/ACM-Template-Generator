@@ -20,17 +20,3 @@ void gauss()
         now++;
     }
 }
-
-// ---
-// 求线性基
-// ---
-for (int i = 1; i <= m; i++)
-    for (int j = 63; ~j; j--)
-        if ((a[i] >> j) & 1)
-            if (!ins[j])
-            {
-                ins[j] = a[i];
-                break;
-            }
-            else
-                a[i] ^= ins[j];
