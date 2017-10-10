@@ -28,11 +28,12 @@
 \author{CSL}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[C]{ACM/ICPC Template Manaual by CSL}\begin{document}\small
+\fancyhead[C]{ACM/ICPC Template Manaual by CSL}
+\begin{document}\small
 \begin{titlepage}
 \maketitle\setcounter{page}{0}\thispagestyle{empty}\clearpage
-\tableofcontents\clearpage
 \end{titlepage}
+\tableofcontents\clearpage
 \pagestyle{fancy}
 \lfoot{}
 \cfoot{\thepage}\rfoot{}
@@ -661,7 +662,7 @@ $gcd(Fib(m),Fib(n))=Fib(gcd(m,n))$
 
 $h(0)=h(1)=1,h(n)=\frac{(4n-2)h(n-1)}{n+1}=\frac{C_{2n}^n}{n+1}=C_{2n}^n-C_{2n}^{n-1}$
 
-\item 线性递推：
+\item 常系数线性递推：
 $$
 a_{n+m}=\sum_{i=0}^{m-1}b_ia_{n+i}\Rightarrow
 \left(
@@ -1095,6 +1096,233 @@ int query(int L, int R, int l, int r, int rt)
     return ret;
 }
 \end{lstlisting}
+\subsection{Binary Search Tree}
+\subsubsection{Treap}
+\begin{lstlisting}
+struct Node
+{
+    Node* ch[2]; // 左右子树
+    int r;       // 随机优先级
+    int v;       // 值
+    int s;       // 结点总数
+    Node(int v = 0) : v(v)
+    {
+        ch[0] = ch[1] = NULL;
+        r = rand();
+        s = 1;
+    }
+    int cmp(int x) const
+    {
+        if (x == v) return -1;
+        return x < v ? 0 : 1;
+    }
+    void maintain()
+    {
+        s = 1;
+        if (ch[0] != NULL) s += ch[0]->s;
+        if (ch[1] != NULL) s += ch[1]->s;
+    }
+};
+void rotate(Node*& o, int d)
+{
+    Node* k = o->ch[d ^ 1];
+    o->ch[d ^ 1] = k->ch[d];
+    k->ch[d] = o;
+    o->maintain();
+    k->maintain();
+    o = k;
+}
+void insert(Node*& o, int x)
+{
+    if (o == NULL)
+        o = new Node(x);
+    else
+    {
+        int d = (x < o->v ? 0 : 1); // 不要用cmp函数，因为可能会有相同结点
+        insert(o->ch[d], x);
+        if (o->ch[d]->r > o->r) rotate(o, d ^ 1);
+    }
+    o->maintain();
+}
+Node* find(Node* o, int x)
+{
+    if (o == NULL) return NULL;
+    if (x == o->v) return o;
+    return x < o->v ? find(o->ch[0], x) : find(o->ch[1], x);
+}
+// 要确保结点存在
+void remove(Node*& o, int x)
+{
+    int d = o->cmp(x);
+    int ret = 0;
+    if (d == -1)
+    {
+        Node* u = o;
+        if (o->ch[0] != NULL && o->ch[1] != NULL)
+        {
+            int d2 = (o->ch[0]->r > o->ch[1]->r ? 1 : 0);
+            rotate(o, d2);
+            remove(o->ch[d2], x);
+        }
+        else
+        {
+            if (o->ch[0] == NULL)
+                o = o->ch[1];
+            else
+                o = o->ch[0];
+            delete u;
+        }
+    }
+    else remove(o->ch[d], x);
+    if (o != NULL) o->maintain();
+}
+int kth(Node* o, int k)
+{
+    if (o == NULL || k <= 0 || k > o->s) return 0;
+    int s = (o->ch[0] == NULL ? 0 : o->ch[0]->s);
+    if (k == s + 1)
+        return o->v;
+    else if (k <= s)
+        return kth(o->ch[0], k);
+    else
+        return kth(o->ch[1], k - s - 1);
+}
+// 在以o为根的子树中，值比x小的结点总数加1
+int rank(Node* o, int x)
+{
+    if (o == NULL) return 1;
+    if (x <= o->v) return rank(o->ch[0], x);
+    return rank(o->ch[1], x) + (o->ch[0] == NULL ? 0 : o->ch[0]->s) + 1;
+}
+\end{lstlisting}
+\subsubsection{Splay}
+\begin{lstlisting}
+struct Node
+{
+    Node* ch[2];
+    int s;
+    int flip;
+    int v;
+    int cmp(int k) const
+    {
+        int d = k - ch[0]->s;
+        if (d == 1) return -1;
+        return d <= 0 ? 0 : 1;
+    }
+    void maintain() { s = ch[0]->s + ch[1]->s + 1; }
+    void pushdown()
+    {
+        if (flip)
+        {
+            flip = 0;
+            swap(ch[0], ch[1]);
+            ch[0]->flip = !ch[0]->flip;
+            ch[1]->flip = !ch[1]->flip;
+        }
+    }
+};
+Node* null = new Node();
+void rotate(Node*& o, int d)
+{
+    Node* k = o->ch[d ^ 1];
+    o->ch[d ^ 1] = k->ch[d];
+    k->ch[d] = o;
+    o->maintain();
+    k->maintain();
+    o = k;
+}
+void splay(Node*& o, int k)
+{
+    o->pushdown();
+    int d = o->cmp(k);
+    if (d == 1) k -= o->ch[0]->s + 1;
+    if (d != -1)
+    {
+        Node* p = o->ch[d];
+        p->pushdown();
+        int d2 = p->cmp(k);
+        int k2 = (d2 == 0 ? k : k - p->ch[0]->s - 1);
+        if (d2 != -1)
+        {
+            splay(p->ch[d2], k2);
+            if (d == d2)
+                rotate(o, d ^ 1);
+            else
+                rotate(o->ch[d], d);
+        }
+        rotate(o, d ^ 1);
+    }
+}
+// 合并left和right。假定left的所有元素比right小。注意right可以是null，但left不可以
+Node* merge(Node* left, Node* right)
+{
+    splay(left, left->s);
+    left->ch[1] = right;
+    left->maintain();
+    return left;
+}
+// 把o的前k小结点放在left里，其他的放在right里。1<=k<=o->s。当k=o->s时，right=null
+void split(Node* o, int k, Node*& left, Node*& right)
+{
+    splay(o, k);
+    left = o;
+    right = o->ch[1];
+    o->ch[1] = null;
+    left->maintain();
+}
+const int maxn = "Edit";
+struct SplaySequence
+{
+    int n;
+    Node seq[maxn];
+    Node* root;
+    Node* build(int sz)
+    {
+        if (!sz) return null;
+        Node* L = build(sz / 2);
+        Node* o = &seq[++n];
+        o->v = n; // 节点编号
+        o->ch[0] = L;
+        o->ch[1] = build(sz - sz / 2 - 1);
+        o->flip = o->s = 0;
+        o->maintain();
+        return o;
+    }
+    void init(int sz)
+    {
+        n = 0;
+        null->s = 0;
+        root = build(sz);
+    }
+};
+\end{lstlisting}
+\subsection{Functional Segment Tree}
+\begin{lstlisting}
+// 静态查询区间第k小的值
+const int maxn = "Edit";
+int a[maxn], rt[maxn];
+int cnt;
+int lson[maxn << 5], rson[maxn << 5], sum[maxn << 5];
+#define Lson l, m, lson[x], lson[y]
+#define Rson m + 1, r, rson[x], rson[y]
+
+void update(int p, int l, int r, int& x, int y)
+{
+    lson[++cnt] = lson[y], rson[cnt] = rson[y], sum[cnt] = sum[y] + 1, x = cnt;
+    if (l == r) return;
+    int m = (l + r) >> 1;
+    if (p <= m) update(p, Lson);
+    else update(p, Rson);
+}
+int query(int l, int r, int x, int y, int k)
+{
+    if (l == r) return l;
+    int m = (l + r) >> 1;
+    int s = sum[lson[y]] - sum[lson[x]];
+    if (s >= k) return query(Lson, k);
+    else return query(Rson, k - s);
+}
+\end{lstlisting}
 \subsection{Partition Tree}
 \begin{lstlisting}
 #define Lson l, m, dep + 1
@@ -1148,34 +1376,7 @@ int query(int L, int R, int k, int l, int r, int dep)
     }
 }
 \end{lstlisting}
-\subsection{Functional Segment Tree}
-\begin{lstlisting}
-// 静态查询区间第k小的值
-const int maxn = "Edit";
-int a[maxn], rt[maxn];
-int cnt;
-int lson[maxn << 5], rson[maxn << 5], sum[maxn << 5];
-#define Lson l, m, lson[x], lson[y]
-#define Rson m + 1, r, rson[x], rson[y]
-
-void update(int p, int l, int r, int& x, int y)
-{
-    lson[++cnt] = lson[y], rson[cnt] = rson[y], sum[cnt] = sum[y] + 1, x = cnt;
-    if (l == r) return;
-    int m = (l + r) >> 1;
-    if (p <= m) update(p, Lson);
-    else update(p, Rson);
-}
-int query(int l, int r, int x, int y, int k)
-{
-    if (l == r) return l;
-    int m = (l + r) >> 1;
-    int s = sum[lson[y]] - sum[lson[x]];
-    if (s >= k) return query(Lson, k);
-    else return query(Rson, k - s);
-}
-\end{lstlisting}
-\subsection{RMQ}
+\subsection{Sparse Table}
 \begin{lstlisting}
 const int maxn = "Edit";
 int mmax[maxn][30], mmin[maxn][30];
@@ -1199,8 +1400,9 @@ int rmq(int l, int r, int op)
         return max(mmax[l][k], mmax[r - (1 << k) + 1][k]);
     return min(mmin[l][k], mmin[r - (1 << k) + 1][k]);
 }
-
-// 二维RMQ
+\end{lstlisting}
+二维RMQ
+\begin{lstlisting}
 void init()
 {
     for (int i = 0; (1 << i) <= n; i++)
@@ -1232,197 +1434,6 @@ int rmq(int x1, int y1, int x2, int y2)
     int m4 = dp[x2 - (1 << kx) + 1][y2 - (1 << ky) + 1][kx][ky];
     return max(max(m1, m2), max(m3, m4));
 }
-\end{lstlisting}
-\subsection{Treap}
-\begin{lstlisting}
-struct Node
-{
-    Node* ch[2]; // 左右子树
-    int r;       // 随机优先级
-    int v;       // 值
-    int s;       // 结点总数
-    Node(int v = 0) : v(v)
-    {
-        ch[0] = ch[1] = NULL;
-        r = rand();
-        s = 1;
-    }
-    int cmp(int x) const
-    {
-        if (x == v) return -1;
-        return x < v ? 0 : 1;
-    }
-    void maintain()
-    {
-        s = 1;
-        if (ch[0] != NULL) s += ch[0]->s;
-        if (ch[1] != NULL) s += ch[1]->s;
-    }
-};
-void rotate(Node*& o, int d)
-{
-    Node* k = o->ch[d ^ 1];
-    o->ch[d ^ 1] = k->ch[d];
-    k->ch[d] = o;
-    o->maintain();
-    k->maintain();
-    o = k;
-}
-void insert(Node*& o, int x)
-{
-    if (o == NULL) o = new Node(x);
-    else
-    {
-        int d = (x < o->v ? 0 : 1); // 不要用cmp函数，因为可能会有相同结点
-        insert(o->ch[d], x);
-        if (o->ch[d]->r > o->r) rotate(o, d ^ 1);
-    }
-    o->maintain();
-}
-Node* find(Node* o, int x)
-{
-    if (o == NULL) return NULL;
-    if (x == o->v) return o;
-    return x < o->v ? find(o->ch[0], x) : find(o->ch[1], x);
-}
-// 要确保结点存在
-void remove(Node*& o, int x)
-{
-    int d = o->cmp(x);
-    int ret = 0;
-    if (d == -1)
-    {
-        Node* u = o;
-        if (o->ch[0] != NULL && o->ch[1] != NULL)
-        {
-            int d2 = (o->ch[0]->r > o->ch[1]->r ? 1 : 0);
-            rotate(o, d2);
-            remove(o->ch[d2], x);
-        }
-        else
-        {
-            if (o->ch[0] == NULL) o = o->ch[1];
-            else o = o->ch[0];
-            delete u;
-        }
-    }
-    else remove(o->ch[d], x);
-    if (o != NULL) o->maintain();
-}
-int kth(Node* o, int k)
-{
-    if (o == NULL || k <= 0 || k > o->s) return 0;
-    int s = (o->ch[0] == NULL ? 0 : o->ch[0]->s);
-    if (k == s + 1) return o->v;
-    else if (k <= s) return kth(o->ch[0], k);
-    else return kth(o->ch[1], k - s - 1);
-}
-// 在以o为根的子树中，值比x小的结点总数加1
-int rank(Node* o, int x)
-{
-    if (o == NULL) return 1;
-    if (x <= o->v) return rank(o->ch[0], x);
-    return rank(o->ch[1], x) + (o->ch[0] == NULL ? 0 : o->ch[0]->s) + 1;
-}
-\end{lstlisting}
-\subsection{Slpay}
-\begin{lstlisting}
-struct Node
-{
-    Node* ch[2];
-    int s;
-    int flip;
-    int v;
-    int cmp(int k) const
-    {
-        int d = k - ch[0]->s;
-        if (d == 1) return -1;
-        return d <= 0 ? 0 : 1;
-    }
-    void maintain() { s = ch[0]->s + ch[1]->s + 1; }
-    void pushdown()
-    {
-        if (flip)
-        {
-            flip = 0;
-            swap(ch[0], ch[1]);
-            ch[0]->flip = !ch[0]->flip;
-            ch[1]->flip = !ch[1]->flip;
-        }
-    }
-};
-Node* null = new Node();
-void rotate(Node*& o, int d)
-{
-    Node* k = o->ch[d ^ 1];
-    o->ch[d ^ 1] = k->ch[d];
-    k->ch[d] = o;
-    o->maintain();
-    k->maintain();
-    o = k;
-}
-void splay(Node*& o, int k)
-{
-    o->pushdown();
-    int d = o->cmp(k);
-    if (d == 1) k -= o->ch[0]->s + 1;
-    if (d != -1)
-    {
-        Node* p = o->ch[d];
-        p->pushdown();
-        int d2 = p->cmp(k);
-        int k2 = (d2 == 0 ? k : k - p->ch[0]->s - 1);
-        if (d2 != -1)
-        {
-            splay(p->ch[d2], k2);
-            if (d == d2) rotate(o, d ^ 1);
-            else rotate(o->ch[d], d);
-        }
-        rotate(o, d ^ 1);
-    }
-}
-// 合并left和right。假定left的所有元素比right小。注意right可以是null，但left不可以
-Node* merge(Node* left, Node* right)
-{
-    splay(left, left->s);
-    left->ch[1] = right;
-    left->maintain();
-    return left;
-}
-// 把o的前k小结点放在left里，其他的放在right里。1<=k<=o->s。当k=o->s时，right=null
-void split(Node* o, int k, Node*& left, Node*& right)
-{
-    splay(o, k);
-    left = o;
-    right = o->ch[1];
-    o->ch[1] = null;
-    left->maintain();
-}
-const int maxn = "Edit";
-struct SplaySequence
-{
-    int n;
-    Node seq[maxn];
-    Node* root;
-    Node* build(int sz)
-    {
-        if (!sz) return null;
-        Node* L = build(sz / 2);
-        Node* o = &seq[++n];
-        o->v = n; // 节点编号
-        o->ch[0] = L;
-        o->ch[1] = build(sz - sz / 2 - 1);
-        o->flip = o->s = 0;
-        o->maintain();
-        return o;
-    }
-    void init(int sz)
-    {
-        n = 0;
-        null->s = 0;
-        root = build(sz);
-    }
-};
 \end{lstlisting}
 \clearpage\section{Graph Theory}
 \subsection{Union-Find Set}

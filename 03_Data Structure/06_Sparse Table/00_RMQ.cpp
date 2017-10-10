@@ -20,8 +20,9 @@ int rmq(int l, int r, int op)
         return max(mmax[l][k], mmax[r - (1 << k) + 1][k]);
     return min(mmin[l][k], mmin[r - (1 << k) + 1][k]);
 }
-
+// ---
 // 二维RMQ
+// ---
 void init()
 {
     for (int i = 0; (1 << i) <= n; i++)

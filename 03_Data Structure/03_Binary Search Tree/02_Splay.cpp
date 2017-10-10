@@ -46,8 +46,10 @@ void splay(Node*& o, int k)
         if (d2 != -1)
         {
             splay(p->ch[d2], k2);
-            if (d == d2) rotate(o, d ^ 1);
-            else rotate(o->ch[d], d);
+            if (d == d2)
+                rotate(o, d ^ 1);
+            else
+                rotate(o->ch[d], d);
         }
         rotate(o, d ^ 1);
     }

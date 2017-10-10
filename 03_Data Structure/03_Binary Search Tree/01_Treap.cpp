@@ -33,7 +33,8 @@ void rotate(Node*& o, int d)
 }
 void insert(Node*& o, int x)
 {
-    if (o == NULL) o = new Node(x);
+    if (o == NULL)
+        o = new Node(x);
     else
     {
         int d = (x < o->v ? 0 : 1); // 不要用cmp函数，因为可能会有相同结点
@@ -64,8 +65,10 @@ void remove(Node*& o, int x)
         }
         else
         {
-            if (o->ch[0] == NULL) o = o->ch[1];
-            else o = o->ch[0];
+            if (o->ch[0] == NULL)
+                o = o->ch[1];
+            else
+                o = o->ch[0];
             delete u;
         }
     }
@@ -76,9 +79,12 @@ int kth(Node* o, int k)
 {
     if (o == NULL || k <= 0 || k > o->s) return 0;
     int s = (o->ch[0] == NULL ? 0 : o->ch[0]->s);
-    if (k == s + 1) return o->v;
-    else if (k <= s) return kth(o->ch[0], k);
-    else return kth(o->ch[1], k - s - 1);
+    if (k == s + 1)
+        return o->v;
+    else if (k <= s)
+        return kth(o->ch[0], k);
+    else
+        return kth(o->ch[1], k - s - 1);
 }
 // 在以o为根的子树中，值比x小的结点总数加1
 int rank(Node* o, int x)

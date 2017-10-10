@@ -136,9 +136,9 @@ if __name__ == '__main__':
     TargetFile.write(TexHead)
     TargetFile.write('\\title{%s}\n' % TITLE)
     TargetFile.write('\\author{%s}\n' % AUTHOR)
-    TargetFile.write('\\pagestyle{fancy}\n\\fancyhf{}\n\\fancyhead[C]{%s by %s}' % (TITLE, AUTHOR))
+    TargetFile.write('\\pagestyle{fancy}\n\\fancyhf{}\n\\fancyhead[C]{%s by %s}\n' % (TITLE, AUTHOR))
     TargetFile.write('\\begin{document}\\small\n')
-    TargetFile.write('\\begin{titlepage}\n\\maketitle\\setcounter{page}{0}\\thispagestyle{empty}\\clearpage\n\\tableofcontents\\clearpage\n\end{titlepage}\n')
+    TargetFile.write('\\begin{titlepage}\n\\maketitle\\setcounter{page}{0}\\thispagestyle{empty}\\clearpage\n\end{titlepage}\n\\tableofcontents\\clearpage\n')
     TargetFile.write('\\pagestyle{fancy}\n\\lfoot{}\n\\cfoot{\\thepage}\\rfoot{}\n')
     TargetFile.write('\\setcounter{section}{-1}\n\\setcounter{page}{1}\n')
 
