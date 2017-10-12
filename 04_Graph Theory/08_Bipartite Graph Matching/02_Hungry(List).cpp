@@ -1,7 +1,7 @@
 /*
-匈牙利算法邻接表形式
 使用前用init()进行初始化
 加边使用函数addedge(u,v)
+调用:res=hungary();输出最大匹配数
 */
 const int maxn = "Edit";
 int n;

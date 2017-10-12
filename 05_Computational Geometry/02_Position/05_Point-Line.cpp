@@ -1,7 +1,7 @@
-point pointtoline(point P, line L)
+double pointtoline(point p, line l)
 {
     point res;
-    double t = ((P - L.s) * (L.e - L.s)) / ((L.e - L.s) * (L.e - L.s));
-    res.x = L.s.x + (L.e.x - L.s.x) * t, res.y = L.s.y + (L.e.y - L.s.y) * t;
-    return dist(P, res);
+    double t = ((p - l.s) * (l.e - l.s)) / ((l.e - l.s) * (l.e - l.s));
+    res.x = l.s.x + (l.e.x - l.s.x) * t, res.y = l.s.y + (l.e.y - l.s.y) * t;
+    return dist(p, res);
 }

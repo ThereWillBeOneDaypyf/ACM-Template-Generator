@@ -2,6 +2,10 @@ const int maxn = "Edit";
 vector<int> G[maxn];
 int pre[maxn], lowlink[maxn], sccno[maxn], dfs_clock, scc_cnt;
 stack<int> S;
+inline void init(int n)
+{
+    for (int i = 0; i < n; i++) G[i].clear（）；
+}
 inline void add_edge(int u, int v) { G[u].pb(v); }
 void dfs(int u)
 {

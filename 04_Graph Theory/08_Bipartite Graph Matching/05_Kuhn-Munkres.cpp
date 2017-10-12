@@ -1,3 +1,4 @@
+//二分图最大权匹配
 const int maxn = "Edit";
 int nx, ny;                           //两边的点数
 int g[maxn][maxn];                    //二分图描述

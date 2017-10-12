@@ -1,8 +1,7 @@
 /*
-二分图匹配(Hopcroft-Carp算法)
-复杂度O(sqrt(n)*E)
 邻接表存图,vector实现
 vector先初始化,然后加边
+复杂度O(sqrt(n)*E)
 uN 为左端的顶点数,使用前赋值(点编号0开始)
 */
 const int maxn = "Edit";

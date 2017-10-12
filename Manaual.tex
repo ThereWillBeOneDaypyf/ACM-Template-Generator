@@ -1008,15 +1008,15 @@ int query(int L, int R, int l, int r, int rt)   // rt[l, r]内查询[L, R]
 \subsubsection{Single-point Update}
 \begin{lstlisting}
 const int maxn = "Edit";
-int sum[maxn << 2];
+int sum[maxn << 2]; // sum[rt]用于维护区间和
 void PushUp(int rt) { sum[rt] = sum[lson] + sum[rson]; }
 void build(int l, int r, int rt)
 {
     if (l == r)
     {
-        scanf("%d", &sum[rt]);
+        scanf("%d", &sum[rt]); // 建立的时候直接输入叶节点
         return;
-    } // 建立的时候直接输入叶节点
+    }
     int m = (l + r) >> 1;
     build(Lson);
     build(Rson);
@@ -1030,8 +1030,10 @@ void update(int p, int add, int l, int r, int rt)
         return;
     }
     int m = (l + r) >> 1;
-    if (p <= m) update(p, add, Lson);
-    else update(p, add, Rson);
+    if (p <= m)
+        update(p, add, Lson);
+    else
+        update(p, add, Rson);
     PushUp(rt);
 }
 int query(int L, int R, int l, int r, int rt)
@@ -1045,10 +1047,8 @@ int query(int L, int R, int l, int r, int rt)
 \end{lstlisting}
 \subsubsection{Interval Update}
 \begin{lstlisting}
-// seg[rt]用于存放懒惰标记，注意PushDown时标记的传递
 const int maxn = "Edit";
-int seg[maxn << 2], sum[maxn << 2];
-
+int seg[maxn << 2], sum[maxn << 2]; // seg[rt]用于存放懒惰标记，注意PushDown时标记的传递
 void PushUp(int rt) { sum[rt] = sum[lson] + sum[rson]; }
 void PushDown(int rt, int m)
 {
@@ -1803,7 +1803,8 @@ int rmq(int l, int r)
     return (dep[l][k] < dep[r - (1 << k) + 1][k]) ? dp[l][k] : dp[r - (1 << k) + 1][k];
 }
 \end{lstlisting}
-\subsection{Biconnected Component}
+\subsection{Depth-First Traversal}
+\subsubsection{Biconnected-Component}
 \begin{lstlisting}
 //割顶的bccno无意义
 const int maxn = "Edit";
@@ -1865,12 +1866,16 @@ void find_bcc(int n)
         if (!pre[i]) dfs(i, -1);
 }
 \end{lstlisting}
-\subsection{Strongly Connected Component}
+\subsubsection{Strongly Connected Component}
 \begin{lstlisting}
 const int maxn = "Edit";
 vector<int> G[maxn];
 int pre[maxn], lowlink[maxn], sccno[maxn], dfs_clock, scc_cnt;
 stack<int> S;
+inline void init(int n)
+{
+    for (int i = 0; i < n; i++) G[i].clear（）；
+}
 inline void add_edge(int u, int v) { G[u].pb(v); }
 void dfs(int u)
 {
@@ -1907,6 +1912,103 @@ void find_scc(int n)
         if (!pre[i]) dfs(i);
 }
 \end{lstlisting}
+\subsubsection{2-SAT}
+\begin{lstlisting}
+struct TwoSAT
+{
+    int n;
+    vector<int> G[maxn << 1];
+    bool mark[maxn << 1];
+    int S[maxn << 1], c;
+    void init(int n)
+    {
+        this->n = n;
+        for (int i = 0; i < (n << 1); i++) G[i].clear();
+        clr(mark, 0);
+    }
+    bool dfs(int x)
+    {
+        if (mark[x ^ 1]) return false;
+        if (mark[x]) return true;
+        mark[x] = true;
+        S[c++] = x;
+        for (int i = 0; i < G[x].size(); i++)
+            if (!dfs(G[x][i])) return false;
+        return true;
+    }
+    //x = xval or y = yval
+    void add_clause(int x, int xval, int y, int yval)
+    {
+        x = (x << 1) + xval;
+        y = (y << 1) + yval;
+        G[x ^ 1].pb(y);
+        G[y ^ 1].pb(x);
+    }
+    bool solve()
+    {
+        for (int i = 0; i < (n << 1); i += 2)
+            if (!mark[i] && !mark[i + 1])
+            {
+                c = 0;
+                if (!dfs(i))
+                {
+                    while (c > 0) mark[S[--c]] = false;
+                    if (!dfs(i + 1)) return false;
+                }
+            }
+        return true;
+    }
+};
+\end{lstlisting}
+\subsection{Eular Path}
+\begin{itemize}
+\item  基本概念:
+    \begin{itemize}
+    \item 欧拉图: 能够没有重复地一次遍历所有边的图。（必须是连通图）
+    \item 欧拉路: 上述遍历的路径就是欧拉路。
+    \item 欧拉回路: 若欧拉路是闭合的（一个圈，从起点开始遍历最终又回到起点），则为欧拉回路。
+    \end{itemize}
+\item 无向图G有欧拉路径的充要条件
+    \begin{itemize}
+    \item G是连通图
+    \item G中奇顶点（连接边的数量为奇数）的数量等于0或2.
+    \end{itemize}
+\item 无向图G有欧拉回路的充要条件
+    \begin{itemize}
+    \item G是连通图
+    \item G中每个顶点都是偶顶点
+    \end{itemize}
+\item 有向图G有欧拉路径的充要条件
+    \begin{itemize}
+    \item G是连通图
+    \item u的出度比入度大1，v的出度比入度小1，其他所有点出度和入度相同。（u为起点，v为终点）
+    \end{itemize}
+\item 有向图G有欧拉回路的充要条件
+    \begin{itemize}
+    \item G是连通图
+    \item G中每个顶点的出度等于入度
+    \end{itemize}
+\end{itemize}
+\subsubsection{Fleury}
+\begin{lstlisting}
+// 若有两个点的度数是奇数，则此时这两个点只能作为欧拉路径的起点和终点。
+const int maxn = "Edit";
+int G[maxn][maxn];
+int deg[maxn][maxn];
+vector<int> Ans;
+inline void init() { clr(G, 0), clr(deg, 0); }
+inline void AddEdge(int u, int v) { deg[u]++, deg[v]++, G[u][v]++, G[v][u]++; }
+void Fleury(int s)
+{
+    for (int i = 0; i < n; i++)
+        if (G[s][i])
+        {
+            G[s][i]--, G[i][s]--;
+            Fleury(i);
+        }
+    Ans.pb(s);
+}
+\end{lstlisting}
 \subsection{Bipartite Graph Matching}
 \begin{enumerate}
 \item 一个二分图中的最大匹配数等于这个图中的最小点覆盖数
@@ -1936,19 +2038,14 @@ void find_scc(int n)
 \subsubsection{Hungry(Matrix)}
 \begin{lstlisting}
 /*
-二分图匹配(匈牙利算法的DFS实现)(邻接矩阵形式)
 初始化:g[][]两边顶点的划分情况
-建立g[i][j]表示i->j的有向边就可以了,是左边向右边的匹配
-g没有边相连则初始化为0
-uN是匹配左边的顶点数,vN是匹配右边的顶点数
 调用:res=hungary();输出最大匹配数
 优点:适用于稠密图,DFS找增广路,实现简洁易于理解
-时间复杂度:O(VE)
-顶点编号从0开始的
+时间复杂度:O(VE).顶点编号从0开始
 */
 const int maxn = "Edit";
-int uN, vN;        //u,v的数目,使用前面必须赋值
-int g[maxn][maxn]; //邻接矩阵
+int uN, vN;        //uN是匹配左边的顶点数,vN是匹配右边的顶点数
+int g[maxn][maxn]; //邻接矩阵g[i][j]表示i->j的有向边就可以了,是左边向右边的匹配
 int linker[maxn];
 bool used[maxn];
 bool dfs(int u)
@@ -1980,9 +2077,9 @@ int hungary()
 \subsubsection{Hungry(List)}
 \begin{lstlisting}
 /*
-匈牙利算法邻接表形式
 使用前用init()进行初始化
 加边使用函数addedge(u,v)
+调用:res=hungary();输出最大匹配数
 */
 const int maxn = "Edit";
 int n;
@@ -2026,10 +2123,9 @@ int hungary()
 \subsubsection{Hopcroft-Carp}
 \begin{lstlisting}
 /*
-二分图匹配(Hopcroft-Carp算法)
-复杂度O(sqrt(n)*E)
 邻接表存图,vector实现
 vector先初始化,然后加边
+复杂度O(sqrt(n)*E)
 uN 为左端的顶点数,使用前赋值(点编号0开始)
 */
 const int maxn = "Edit";
@@ -2155,6 +2251,7 @@ int hungary()
 \end{lstlisting}
 \subsubsection{Kuhn-Munkres}
 \begin{lstlisting}
+//二分图最大权匹配
 const int maxn = "Edit";
 int nx, ny;                           //两边的点数
 int g[maxn][maxn];                    //二分图描述
@@ -2218,6 +2315,7 @@ int KM()
 \end{lstlisting}
 \subsection{Network Flow}
 \begin{lstlisting}
+// 以下算法除特殊说明外均使用如下数据结构表示一条弧
 struct Edge
 {
     int from, to, cap, flow;
@@ -2567,103 +2665,6 @@ struct MCMF
     }
 };
 \end{lstlisting}
-\subsection{2-SAT}
-\begin{lstlisting}
-struct TwoSAT
-{
-    int n;
-    vector<int> G[maxn << 1];
-    bool mark[maxn << 1];
-    int S[maxn << 1], c;
-    void init(int n)
-    {
-        this->n = n;
-        for (int i = 0; i < (n << 1); i++) G[i].clear();
-        clr(mark, 0);
-    }
-    bool dfs(int x)
-    {
-        if (mark[x ^ 1]) return false;
-        if (mark[x]) return true;
-        mark[x] = true;
-        S[c++] = x;
-        for (int i = 0; i < G[x].size(); i++)
-            if (!dfs(G[x][i])) return false;
-        return true;
-    }
-    //x = xval or y = yval
-    void add_clause(int x, int xval, int y, int yval)
-    {
-        x = (x << 1) + xval;
-        y = (y << 1) + yval;
-        G[x ^ 1].pb(y);
-        G[y ^ 1].pb(x);
-    }
-    bool solve()
-    {
-        for (int i = 0; i < (n << 1); i += 2)
-            if (!mark[i] && !mark[i + 1])
-            {
-                c = 0;
-                if (!dfs(i))
-                {
-                    while (c > 0) mark[S[--c]] = false;
-                    if (!dfs(i + 1)) return false;
-                }
-            }
-        return true;
-    }
-};
-\end{lstlisting}
-\subsection{Eular Path}
-\begin{itemize}
-\item  基本概念:
-    \begin{itemize}
-    \item 欧拉图: 能够没有重复地一次遍历所有边的图。（必须是连通图）
-    \item 欧拉路: 上述遍历的路径就是欧拉路。
-    \item 欧拉回路: 若欧拉路是闭合的（一个圈，从起点开始遍历最终又回到起点），则为欧拉回路。
-    \end{itemize}
-\item 无向图G有欧拉路径的充要条件
-    \begin{itemize}
-    \item G是连通图
-    \item G中奇顶点（连接边的数量为奇数）的数量等于0或2.
-    \end{itemize}
-\item 无向图G有欧拉回路的充要条件
-    \begin{itemize}
-    \item G是连通图
-    \item G中每个顶点都是偶顶点
-    \end{itemize}
-\item 有向图G有欧拉路径的充要条件
-    \begin{itemize}
-    \item G是连通图
-    \item u的出度比入度大1，v的出度比入度小1，其他所有点出度和入度相同。（u为起点，v为终点）
-    \end{itemize}
-\item 有向图G有欧拉回路的充要条件
-    \begin{itemize}
-    \item G是连通图
-    \item G中每个顶点的出度等于入度
-    \end{itemize}
-\end{itemize}
-\subsubsection{Fleury}
-\begin{lstlisting}
-// 若有两个点的度数是奇数，则此时这两个点只能作为欧拉路径的起点和终点。
-const int maxn = "Edit";
-int G[maxn][maxn];
-int deg[maxn][maxn];
-vector<int> Ans;
-inline void init() { clr(G, 0), clr(deg, 0); }
-inline void AddEdge(int u, int v) { deg[u]++, deg[v]++, G[u][v]++, G[v][u]++; }
-void Fleury(int s)
-{
-    for (int i = 0; i < n; i++)
-        if (G[s][i])
-        {
-            G[s][i]--, G[i][s]--;
-            Fleury(i);
-        }
-    Ans.pb(s);
-}
-\end{lstlisting}
 \clearpage\section{Computational Geometry}
 \subsection{Basic Function}
 \begin{lstlisting}
@@ -2743,17 +2744,17 @@ bool segxline(line l1, line l2)
 \end{lstlisting}
 \subsubsection{Point-Line}
 \begin{lstlisting}
-point pointtoline(point P, line L)
+double pointtoline(point p, line l)
 {
     point res;
-    double t = ((P - L.s) * (L.e - L.s)) / ((L.e - L.s) * (L.e - L.s));
-    res.x = L.s.x + (L.e.x - L.s.x) * t, res.y = L.s.y + (L.e.y - L.s.y) * t;
-    return dist(P, res);
+    double t = ((p - l.s) * (l.e - l.s)) / ((l.e - l.s) * (l.e - l.s));
+    res.x = l.s.x + (l.e.x - l.s.x) * t, res.y = l.s.y + (l.e.y - l.s.y) * t;
+    return dist(p, res);
 }
 \end{lstlisting}
 \subsubsection{Point-Segment}
 \begin{lstlisting}
-point pointtosegment(point p, line l)
+double pointtosegment(point p, line l)
 {
     point res;
     double t = ((p - l.s) * (l.e - l.s)) / ((l.e - l.s) * (l.e - l.s));
@@ -2761,7 +2762,7 @@ point pointtosegment(point p, line l)
         res.x = l.s.x + (l.e.x - l.s.x) * t, res.y = l.s.y + (l.e.y - l.s.y) * t;
     else
         res = dist(p, l.s) < dist(p, l.e) ? l.s : l.e;
-    return res;
+    return dist(p, res);
 }
 \end{lstlisting}
 \subsubsection{Point on Segment}

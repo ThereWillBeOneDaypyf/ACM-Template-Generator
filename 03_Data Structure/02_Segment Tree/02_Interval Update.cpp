@@ -1,7 +1,5 @@
-// seg[rt]用于存放懒惰标记，注意PushDown时标记的传递
 const int maxn = "Edit";
-int seg[maxn << 2], sum[maxn << 2];
-
+int seg[maxn << 2], sum[maxn << 2]; // seg[rt]用于存放懒惰标记，注意PushDown时标记的传递
 void PushUp(int rt) { sum[rt] = sum[lson] + sum[rson]; }
 void PushDown(int rt, int m)
 {
