@@ -28,8 +28,9 @@ ll dfs(int pos, /*state变量*/, bool lead /*前导零*/, bool limit /*数位上
 ll solve(ll x)
 {
     int pos = 0;
-    while (x) //把数位都分解出来
-        a[pos++] = x % 10, x /= 10;
+    do //把数位都分解出来
+        a[pos++] = x % 10;
+    while (x /= 10);
     return dfs(pos - 1 /*从最高位开始枚举*/, /*一系列状态 */, true, true);
     //刚开始最高位都是有限制并且有前导零的，显然比最高位还要高的一位视为0
 }
